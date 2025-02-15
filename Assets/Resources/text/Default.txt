@@ -96,19 +96,21 @@ crossbowexpl2_desc = Your hero's range weapon. Step back in battle to use. Bigge
 / Helpers
 /------------------------------------------------------------------
 
-helper_farmer_name = Farmer
-helper_samurai_name = Sword Warrior
-helper_samurai_archer = Bowman
-helper_samurai_spearman = Spear Warrior
-helper_heavy_samurai = Panzer Samurai
-helper_Nobunaga = Nobunaga
-helper_swordsmith = Swordsmith
-helper_priest = Priest
-helper_ice_archer = Frostie the Bowman
+helper_farmer_name = Ashigaru
+helper_stiltfarmer_name = Takeuma Farmer
+helper_shieldsamurai_name = Shield Trooper
+helper_samurai_name = Samurai
+helper_samurai_archer = Kyudo Bowman
+helper_samurai_spearman = Spearman
+helper_heavy_samurai = O-Yoroi Samurai
+helper_Nobunaga = Oda Nobunaga
+helper_swordsmith = Masamune
+helper_priest = Kamunushi
+helper_ice_archer = Frosty the Bowman
 helper_rifleman = Rifleman
 helper_takeda = Takeda Shingen
-helper_horseman = Spear Horseman
-helper_ninja_girl = Assassin
+helper_horseman = Bajutsu Spearman
+helper_ninja_girl = Ninja
 
 helper_crawler_name = Hopping Torso
 helper_chochinobake_name = Possessed Lantern
@@ -129,19 +131,21 @@ helper_zombiespear_name = Zombie Spearman
 /------------------------------------------------------------------
 
 hero_desc = The Village's bravest warrior. Use his strength to guide his people to victory! 
-helper_farmer_desc = Not very strong, but oh so loyal.
-helper_samurai_desc = Sworn protectors of the Village. Medium Health and Damage.
-helper_samurai_archer_desc = Long Range but can't take a punch.
-helper_samurai_spearman_desc = Fights from behind the line but not a coward.
-helper_heavy_samurai_desc = Extremely tough but his heavy armor slows his attack speed.
-helper_Nobunaga_desc = Legendary Warrior. Some would say he's unstoppable.
-helper_priest_desc = Heals allies with the power of the divine.
-helper_ice_archer_desc = Ice to see you! Arrows temporarily freeze foes.
-helper_swordsmith_desc = Master Swordsmith upgrades all Farmers on the field of battle!
-helper_rifleman_desc = The Rifleman upgrades all Archers on the field of battle!
-helper_takeda_desc = Hero of Legend! This mighty warrior has a long range attack from horseback.
-helper_horseman_desc = Medium range attack from horseback! 
-helper_ninja_girl_desc = Speedy Assasin! She strikes fast and can use both melee and ranged attacks!
+helper_farmer_desc = As farmers of the village, not very strong, but oh so loyal.
+helper_stiltfarmer_desc = Once the playthings of children, stilts protect these farmers from the demon hordes.
+helper_shieldsamurai_desc = Although shields are uncommon, they are ever effective in blocking away the hordes.
+helper_samurai_desc = Sworn protectors of the village, armed to repel the invasion!
+helper_samurai_archer_desc = Long ranged, but can't take a hit up close.
+helper_samurai_spearman_desc = Fight from the rear, but do not mistake them for cowards.
+helper_heavy_samurai_desc = Extremely tough, but slowed by heavy armour.
+helper_Nobunaga_desc = Ruthless leader of the Oda clan, come to make legend.
+helper_priest_desc = Heal allies with miracles of the divine.
+helper_ice_archer_desc = Stone-cold chiller, slowing the hordes with their frozen arrows!
+helper_swordsmith_desc = Japan's greatest swordsmith, upgrading ashigaru on the field of battle!
+helper_rifleman_desc = Upgrades all bowmen to fire hinawaju rifles for much greater damge!
+helper_takeda_desc = The legendary Tiger of Kai, defeating the hordes on horseback!
+helper_horseman_desc = The cavalry, charging into battle but keeping their distance!
+helper_ninja_girl_desc = Speedy assassins, striking fast with both melee and ranged attacks!
 
 helper_crawler_desc = Legs are a crutch…
 helper_chochinobake_desc = RUN FAST…go BOOOM!
@@ -338,11 +342,11 @@ store_tap_joy = FREE\nGlu Credits!
 
 store_unlockatwave = Unlock at Wave {0}
 store_findInPresent = Hint: Look for these presents!
-store_find_frostie = Find Frostie the Bowman!
-store_find_swordsmith = Find the Swordsmith!
+store_find_frostie = Find Frosty the Bowman!
+store_find_swordsmith = Find Masamune!
 store_find_rifleman = Find the Rifleman!
 store_find_takeda = Find Takeda Shingen!
-store_find_ninja_girl = Find the Assassin!
+store_find_ninja_girl = Find the Ninja!
 store_find_necromancer = Find the Necromancer!
 
 store_leadership_desc = Makes your leadership bar starts at level {0}.

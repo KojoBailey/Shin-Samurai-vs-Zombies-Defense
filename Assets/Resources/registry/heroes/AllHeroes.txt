@@ -1,4 +1,5 @@
 / List all heroes in the folder
 
 HeroSamurai
+HeroRonin
 HeroZombie

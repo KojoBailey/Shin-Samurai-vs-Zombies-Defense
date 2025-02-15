@@ -5,115 +5,60 @@ using UnityEngine;
 public class InGameImpl : WeakGlobalSceneBehavior<InGameImpl>
 {
 	private const int kMaxHelpers = 5;
-
 	private const float kDialogPriority = 500f;
-
 	private const float kWinPriority = 1000f;
-
 	private const float kSlowMoEffectStartScale = 0.1f;
-
 	private const float kSlowMoEffectIncrement = 0.8f;
-
 	private const float kCameraZoomInOffset = 200f;
-
 	private const float kCameraZoomOutSpeed = 80f;
-
 	private const float kCameraMoveUpSpeed = 25f;
-
 	private const int kWaveToShowEndGameNarrative = 70;
-
 	public Transform heroSpawnPointLeft;
-
 	public Transform heroSpawnPointRight;
-
 	public GameObject enemiesTargetLeft;
-
 	public GameObject vortexLeft;
-
 	public GameObject gateSparklesLeft;
-
 	public GameObject enemiesTargetRight;
-
 	public Camera gameCamera;
-
 	public Transform heroWalkLeftEdge;
-
 	public Transform heroWalkRightEdge;
-
 	public BoxCollider enemiesSpawnAreaLeft;
-
 	public BoxCollider enemiesSpawnAreaRight;
-
 	public BoxCollider helpersSpawnAreaLeft;
-
 	public BoxCollider helpersSpawnAreaRight;
-
 	public GameObject bellRingerObject;
-
 	public Transform[] villageArcher = new Transform[3];
-
 	private PrefabPreloader mPrefabPreloader = new PrefabPreloader();
-
 	private BuffIconManager mBuffIconManager = new BuffIconManager();
-
 	private GameHUD mHUD;
-
 	private Hero mHero;
-
 	private Base mBase;
-
 	private Bell mBell;
-
 	private CharactersManager mCharactersManager;
-
 	private CollectableManager mCollectableManager;
-
 	private ProjectileManager mProjectileManager;
-
 	private WaveManager mWaveManager;
-
 	private ProceduralShaderManager mShaderManager;
-
 	private Smithy mSmithy;
-
 	private TutorialManager mTutorial;
-
 	private LegionOnTheLooseManager mLegionManager;
-
 	private RailManager mRailManager;
-
 	private DialogHandler mDialogHandler;
-
 	private NarrativeManager mNarrativeManager;
-
 	private TimedEventManager mTimedEventManager = new TimedEventManager();
-
 	private VillageArchers mVillageArchers;
-
 	private GraveHandsEffect mGraveHandsEffect;
-
 	private FPSCounter mFPSCounter;
-
 	private bool mGameOver;
-
 	private bool mPauseGameForBlockingDialog = true;
-
 	private bool mHaveShowReviveDialog;
-
 	private float mAllAlliesInvincibleTimer;
-
 	private WaveBanner mWaveBanner;
-
 	private GenericGameBanner mGenericGameBanner;
-
 	private MiniHealthBarRegistrar mMiniHealthBarRegistrar = new MiniHealthBarRegistrar();
-
 	private float mCameraYOffset = 100f;
-
 	private float mBaseTimeScale = 1f;
-
 	private bool mStartedSlowMoFinisher;
-
 	private PlayModesManager.GameDirection mGameDirection = Singleton<PlayModesManager>.instance.gameDirection;
 
 	public Transform heroSpawnPoint

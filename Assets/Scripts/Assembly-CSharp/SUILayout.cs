@@ -181,6 +181,16 @@ public class SUILayout : SUIProcess
 		}
 	}
 
+	public SUILabel GetLabel(string name) {
+		return (SUILabel)this[name];
+	}
+	public SUIButton GetButton(string name) {
+		return (SUIButton)this[name];
+	}
+	public SUISprite GetSprite(string name) {
+		return (SUISprite)this[name];
+	}
+
 	public Dictionary<string, ObjectData> objects
 	{
 		get
