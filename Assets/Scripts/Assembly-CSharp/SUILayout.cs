@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class SUILayout : SUIProcess
 {
-	public struct NormalRange
-	{
+	public struct NormalRange {
 		public float min;
 
 		public float max;
@@ -16,31 +15,21 @@ public class SUILayout : SUIProcess
 		}
 	}
 
-	public class ObjectData
-	{
+	public class ObjectData {
 		public SUIProcess obj;
-
 		public SUILayoutAnim.AnimVector2 animPosition;
-
 		public SUILayoutAnim.AnimFloat animAlpha;
-
 		public List<SUILayoutEffect.Effect> effects;
 
-		public void Update()
-		{
+		public void Update() {
 			obj.Update();
-			if (effects == null)
-			{
-				return;
-			}
-			foreach (SUILayoutEffect.Effect effect in effects)
-			{
+			if (effects == null) return;
+			foreach (SUILayoutEffect.Effect effect in effects) {
 				effect.Update();
 			}
 		}
 
-		public void Destroy()
-		{
+		public void Destroy() {
 			obj.Destroy();
 			obj = null;
 			effects = null;
@@ -48,24 +37,18 @@ public class SUILayout : SUIProcess
 			animAlpha = null;
 		}
 
-		public void AddEffect(SUILayoutEffect.Effect e)
-		{
-			if (effects == null)
-			{
+		public void AddEffect(SUILayoutEffect.Effect e) {
+			if (effects == null) {
 				effects = new List<SUILayoutEffect.Effect>(1);
 			}
 			effects.Add(e);
 		}
 	}
 
-	private class TransitionSoundTrigger
-	{
+	private class TransitionSoundTrigger {
 		public float frameVal;
-
 		public string soundID;
-
 		public bool played;
-
 		public TypedWeakReference<GameObject> objectToPlayFrom;
 	}
 
@@ -91,90 +74,63 @@ public class SUILayout : SUIProcess
 
 	private TransitionSoundTrigger mOnTransitOutPlaySound;
 
-	public bool isAnimating
-	{
-		get
-		{
+	public bool isAnimating {
+		get {
 			return mAnimProg != mAnimTarget;
 		}
 	}
 
-	public float frame
-	{
-		get
-		{
+	public float frame {
+		get {
 			return mAnimProg;
-		}
-		set
-		{
+		} set {
 			mAnimProg = Mathf.Clamp(value, 0f, 1f);
 			DrawAnimFrame(mAnimProg);
 		}
 	}
 
-	public float defaultTransitionSpeed
-	{
-		get
-		{
+	public float defaultTransitionSpeed {
+		get {
 			return mDefaultAnimSpeed;
-		}
-		set
-		{
+		} set {
 			mDefaultAnimSpeed = value;
 		}
 	}
 
-	public float basePriority
-	{
-		get
-		{
+	public float basePriority {
+		get {
 			return mBasePriority;
-		}
-		set
-		{
+		} set {
 			float num = value - mBasePriority;
 			mBasePriority = value;
-			foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-			{
-				if (mObject.Value.obj is IHasVisualAttributes)
-				{
+			foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
+				if (mObject.Value.obj is IHasVisualAttributes) {
 					((IHasVisualAttributes)mObject.Value.obj).priority += num;
 				}
 			}
 		}
 	}
 
-	public Vector2 basePosition
-	{
-		get
-		{
+	public Vector2 basePosition {
+		get {
 			return mBasePosition;
-		}
-		set
-		{
+		} set {
 			Vector2 vector = new Vector2(value.x - mBasePosition.x, value.y - mBasePosition.y);
 			mBasePosition = value;
-			foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-			{
-				if (mObject.Value.obj is IHasVisualAttributes)
-				{
+			foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
+				if (mObject.Value.obj is IHasVisualAttributes) {
 					((IHasVisualAttributes)mObject.Value.obj).position += vector;
 				}
 			}
 		}
 	}
 
-	public SUIProcess this[string name]
-	{
-		get
-		{
+	public SUIProcess this[string name] {
+		get {
 			SUIProcess result = null;
-			try
-			{
+			try {
 				result = mObjects[name.ToLower()].obj;
-			}
-			catch
-			{
+			} catch {
 				Debug.Log("ERROR: Trying to access non-existant object '" + name + "'");
 			}
 			return result;
@@ -191,49 +147,37 @@ public class SUILayout : SUIProcess
 		return (SUISprite)this[name];
 	}
 
-	public Dictionary<string, ObjectData> objects
-	{
-		get
-		{
+	public Dictionary<string, ObjectData> objects {
+		get {
 			return mObjects;
 		}
 	}
 
-	public SDFTreeNode data
-	{
-		get
-		{
-			if (mExtraData == null)
-			{
+	public SDFTreeNode data {
+		get {
+			if (mExtraData == null) {
 				mExtraData = new SDFTreeNode();
 			}
 			return mExtraData;
 		}
 	}
 
-	public SUILayout()
-	{
-	}
+	public SUILayout() {}
 
-	public SUILayout(string layoutFile)
-	{
+	public SUILayout(string layoutFile) {
 		Load(layoutFile);
 	}
 
-	private static NormalRange StringToNormalRangeOptional(string str)
-	{
-		if (str != string.Empty)
-		{
+	private static NormalRange StringToNormalRangeOptional(string str) {
+		if (str != string.Empty) {
 			return SUILayoutConv.GetNormalRange(str);
 		}
 		return new NormalRange(0f, 1f);
 	}
 
-	private TransitionSoundTrigger CreateSoundTrigger(string data, GameObject toPlayFrom)
-	{
+	private TransitionSoundTrigger CreateSoundTrigger(string data, GameObject toPlayFrom) {
 		string[] array = data.Split(',');
-		if (array.Length != 2)
-		{
+		if (array.Length != 2) {
 			Debug.Log("WARNING: malformed layout sound trigger: " + data);
 			return null;
 		}
@@ -244,195 +188,143 @@ public class SUILayout : SUIProcess
 		return transitionSoundTrigger;
 	}
 
-	public void Load(string layoutFile)
-	{
+	public void Load(string layoutFile) {
 		SDFTreeNode sDFTreeNode = SingletonMonoBehaviour<ResourcesManager>.instance.Open(layoutFile);
-		if (sDFTreeNode == null)
-		{
-			return;
-		}
+		if (sDFTreeNode == null) return;
 		GameObject gameObject = null;
-		foreach (KeyValuePair<string, SDFTreeNode> child in sDFTreeNode.childs)
-		{
-			if (child.Key == "_data")
-			{
+		foreach (KeyValuePair<string, SDFTreeNode> child in sDFTreeNode.childs) {
+			if (child.Key == "_data") {
 				mExtraData = child.Value;
 				continue;
 			}
 			SUIProcess sUIProcess = SUILayoutCreator.Create(child.Value);
-			if (sUIProcess != null)
-			{
+			if (sUIProcess != null) {
 				mObjects[child.Key] = new ObjectData();
 				mObjects[child.Key].obj = sUIProcess;
-				if (child.Value.to("transition") != null)
-				{
+				if (child.Value.to("transition") != null) {
 					ExtractAnimOutData(child.Value.to("transition"), mObjects[child.Key]);
 				}
-				if (child.Value.to("effect") != null)
-				{
+				if (child.Value.to("effect") != null) {
 					ExtractEffectData(child.Value.to("effect"), mObjects[child.Key]);
 				}
-				if (gameObject == null && sUIProcess is SUIWidget)
-				{
+				if (gameObject == null && sUIProcess is SUIWidget) {
 					gameObject = ((SUIWidget)sUIProcess).gameObject;
 				}
-			}
-			else
-			{
+			} else {
 				Debug.Log("ERROR: Could not create widget '" + child.Key + "'.");
 			}
 		}
-		if (sDFTreeNode.hasAttribute("transitionSpeed"))
-		{
+		if (sDFTreeNode.hasAttribute("transitionSpeed")) {
 			mDefaultAnimSpeed = float.Parse(sDFTreeNode["transitionSpeed"]);
 		}
-		if (sDFTreeNode.hasAttribute("onTransitionInPlaySound"))
-		{
+		if (sDFTreeNode.hasAttribute("onTransitionInPlaySound")) {
 			mOnTransitInPlaySound = CreateSoundTrigger(sDFTreeNode["onTransitionInPlaySound"], gameObject);
 		}
-		if (sDFTreeNode.hasAttribute("onTransitionOutPlaySound"))
-		{
+		if (sDFTreeNode.hasAttribute("onTransitionOutPlaySound")) {
 			mOnTransitOutPlaySound = CreateSoundTrigger(sDFTreeNode["onTransitionOutPlaySound"], gameObject);
 		}
 	}
 
-	public void Add(string key, SUIProcess obj)
-	{
+	public void Add(string key, SUIProcess obj) {
 		ObjectData objectData = new ObjectData();
 		objectData.obj = obj;
 		Add(key, objectData);
 	}
 
-	public void Add(string key, ObjectData od)
-	{
+	public void Add(string key, ObjectData od) {
 		key = key.ToLower();
-		if (mObjects.ContainsKey(key))
-		{
+		if (mObjects.ContainsKey(key)) {
 			Debug.Log("ERROR: Trying to add an object with existing key name: " + key);
-		}
-		else
-		{
+		} else {
 			mObjects.Add(key, od);
 		}
 	}
 
-	public void Remove(string key)
-	{
+	public void Remove(string key) {
 		Remove(key, false);
 	}
 
-	public void Remove(string key, bool destroy)
-	{
-		if (destroy)
-		{
+	public void Remove(string key, bool destroy) {
+		if (destroy) {
 			ObjectData objectData = mObjects[key];
-			if (objectData != null)
-			{
+			if (objectData != null) {
 				objectData.Destroy();
 			}
 		}
 		mObjects.Remove(key.ToLower());
 	}
 
-	public virtual void Update()
-	{
+	public virtual void Update() {
 		UpdateAnimation();
-		if (mObjects == null)
-		{
-			return;
-		}
-		foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-		{
+		if (mObjects == null) return;
+		foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
 			mObject.Value.Update();
 		}
 	}
 
-	public void AnimateIn(float speed)
-	{
+	public void AnimateIn(float speed) {
 		mAnimSpeed = speed;
 		StartAnimateIn();
 	}
 
-	public void AnimateIn()
-	{
+	public void AnimateIn() {
 		mAnimSpeed = mDefaultAnimSpeed;
 		StartAnimateIn();
 	}
 
-	public void AnimateOut(float speed)
-	{
+	public void AnimateOut(float speed) {
 		mAnimSpeed = speed;
 		StartAnimateOut();
 	}
 
-	public void AnimateOut()
-	{
+	public void AnimateOut() {
 		mAnimSpeed = mDefaultAnimSpeed;
 		StartAnimateOut();
 	}
 
-	public void SetAllVisible(bool visible)
-	{
-		foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-		{
-			if (mObject.Value.obj is IHasVisualAttributes)
-			{
+	public void SetAllVisible(bool visible) {
+		foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
+			if (mObject.Value.obj is IHasVisualAttributes) {
 				((IHasVisualAttributes)mObject.Value.obj).visible = visible;
 			}
 		}
 	}
 
-	public virtual void Destroy()
-	{
-		foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-		{
+	public virtual void Destroy() {
+		foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
 			mObject.Value.Destroy();
 		}
 		mObjects = null;
 	}
 
-	public void Clear()
-	{
+	public void Clear() {
 		Destroy();
 		mObjects = new Dictionary<string, ObjectData>();
 	}
 
-	public bool Exists(string name)
-	{
+	public bool Exists(string name) {
 		SUIProcess sUIProcess = null;
-		try
-		{
+		try {
 			sUIProcess = mObjects[name.ToLower()].obj;
-		}
-		catch
-		{
-		}
+		} catch {}
 		return sUIProcess != null;
 	}
 
-	public void EditorRenderOnGUI()
-	{
-		foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-		{
+	public void EditorRenderOnGUI() {
+		foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
 			mObject.Value.obj.EditorRenderOnGUI();
 		}
 	}
 
-	private void ExtractAnimOutData(SDFTreeNode outData, ObjectData targetObj)
-	{
+	private void ExtractAnimOutData(SDFTreeNode outData, ObjectData targetObj) {
 		SDFTreeNode sDFTreeNode = outData.to("position");
-		if (sDFTreeNode != null)
-		{
+		if (sDFTreeNode != null) {
 			IHasVisualAttributes hasVisualAttributes = (IHasVisualAttributes)targetObj.obj;
 			Vector2 @out;
-			if (sDFTreeNode.hasAttribute("position"))
-			{
+			if (sDFTreeNode.hasAttribute("position")) {
 				@out = SUILayoutConv.GetVector2(sDFTreeNode["position"]);
-			}
-			else
-			{
-				if (!sDFTreeNode.hasAttribute("offset"))
-				{
+			} else {
+				if (!sDFTreeNode.hasAttribute("offset")) {
 					Debug.Log("ERROR: animated position block missing either a 'position' or 'offset'.");
 					return;
 				}
@@ -441,56 +333,41 @@ public class SUILayout : SUIProcess
 			targetObj.animPosition = new SUILayoutAnim.AnimVector2(hasVisualAttributes.position, @out, StringToNormalRangeOptional(sDFTreeNode["animRange"]), SUILayoutConv.GetEaseFunc(sDFTreeNode["anim"]));
 		}
 		SDFTreeNode sDFTreeNode2 = outData.to("alpha");
-		if (sDFTreeNode2 != null)
-		{
+		if (sDFTreeNode2 != null) {
 			float out2 = float.Parse(sDFTreeNode2["alpha"]);
 			IHasVisualAttributes hasVisualAttributes2 = (IHasVisualAttributes)targetObj.obj;
 			targetObj.animAlpha = new SUILayoutAnim.AnimFloat(hasVisualAttributes2.alpha, out2, StringToNormalRangeOptional(sDFTreeNode2["animRange"]), SUILayoutConv.GetEaseFunc(sDFTreeNode2["anim"]));
 		}
 	}
 
-	private void ExtractEffectData(SDFTreeNode effectsData, ObjectData targetObj)
-	{
-		if (!(targetObj.obj is IHasVisualAttributes))
-		{
-			return;
-		}
-		foreach (KeyValuePair<string, SDFTreeNode> child in effectsData.childs)
-		{
+	private void ExtractEffectData(SDFTreeNode effectsData, ObjectData targetObj) {
+		if (!(targetObj.obj is IHasVisualAttributes)) return;
+		foreach (KeyValuePair<string, SDFTreeNode> child in effectsData.childs) {
 			SUILayoutEffect.Effect effect = SUILayoutEffect.CreateEffect((IHasVisualAttributes)targetObj.obj, child.Key, child.Value);
-			if (effect != null && targetObj.effects == null)
-			{
+			if (effect != null && targetObj.effects == null) {
 				targetObj.effects = new List<SUILayoutEffect.Effect>();
 				targetObj.effects.Add(effect);
 			}
 		}
 	}
 
-	private void UpdateAnimation()
-	{
-		if (mAnimProg == mAnimTarget)
-		{
-			if (onTransitionOver != null)
-			{
+	private void UpdateAnimation() {
+		if (mAnimProg == mAnimTarget) {
+			if (onTransitionOver != null) {
 				onTransitionOver();
 				onTransitionOver = null;
 			}
 			return;
 		}
-		if (mAnimProg < mAnimTarget)
-		{
+		if (mAnimProg < mAnimTarget) {
 			mAnimProg = Mathf.Min(mAnimTarget, mAnimProg + SUIScreen.deltaTime / mAnimSpeed);
-			if (mOnTransitInPlaySound != null && !mOnTransitInPlaySound.played && mAnimProg >= mOnTransitInPlaySound.frameVal)
-			{
+			if (mOnTransitInPlaySound != null && !mOnTransitInPlaySound.played && mAnimProg >= mOnTransitInPlaySound.frameVal) {
 				mOnTransitInPlaySound.played = true;
 				Singleton<SUISoundManager>.instance.Play(mOnTransitInPlaySound.soundID, mOnTransitInPlaySound.objectToPlayFrom.ptr);
 			}
-		}
-		else
-		{
+		} else {
 			mAnimProg = Mathf.Max(mAnimTarget, mAnimProg - SUIScreen.deltaTime / mAnimSpeed);
-			if (mOnTransitOutPlaySound != null && !mOnTransitOutPlaySound.played && mAnimProg <= mOnTransitOutPlaySound.frameVal)
-			{
+			if (mOnTransitOutPlaySound != null && !mOnTransitOutPlaySound.played && mAnimProg <= mOnTransitOutPlaySound.frameVal) {
 				mOnTransitOutPlaySound.played = true;
 				Singleton<SUISoundManager>.instance.Play(mOnTransitOutPlaySound.soundID, mOnTransitOutPlaySound.objectToPlayFrom.ptr);
 			}
@@ -498,25 +375,18 @@ public class SUILayout : SUIProcess
 		DrawAnimFrame(mAnimProg);
 	}
 
-	private void DrawAnimFrame(float prog)
-	{
-		foreach (KeyValuePair<string, ObjectData> mObject in mObjects)
-		{
-			if (mObject.Value.animPosition != null && mObject.Value.obj is IHasVisualAttributes)
-			{
+	private void DrawAnimFrame(float prog) {
+		foreach (KeyValuePair<string, ObjectData> mObject in mObjects) {
+			if (mObject.Value.animPosition != null && mObject.Value.obj is IHasVisualAttributes) {
 				IHasVisualAttributes hasVisualAttributes = (IHasVisualAttributes)mObject.Value.obj;
 				hasVisualAttributes.position = mObject.Value.animPosition.getAt(prog);
 			}
-			if (mObject.Value.animAlpha != null)
-			{
+			if (mObject.Value.animAlpha != null) {
 				float at = mObject.Value.animAlpha.getAt(prog);
-				if (mObject.Value.obj is IHasVisualAttributes)
-				{
+				if (mObject.Value.obj is IHasVisualAttributes) {
 					IHasVisualAttributes hasVisualAttributes2 = (IHasVisualAttributes)mObject.Value.obj;
 					hasVisualAttributes2.alpha = at;
-				}
-				else if (mObject.Value.obj is SUIScrollList)
-				{
+				} else if (mObject.Value.obj is SUIScrollList) {
 					SUIScrollList sUIScrollList = (SUIScrollList)mObject.Value.obj;
 					sUIScrollList.alpha = at;
 				}
@@ -524,23 +394,19 @@ public class SUILayout : SUIProcess
 		}
 	}
 
-	private void StartAnimateIn()
-	{
+	private void StartAnimateIn() {
 		mAnimProg = 0f;
 		mAnimTarget = 1f;
-		if (mOnTransitInPlaySound != null)
-		{
+		if (mOnTransitInPlaySound != null) {
 			mOnTransitInPlaySound.played = false;
 		}
 		DrawAnimFrame(mAnimProg);
 	}
 
-	private void StartAnimateOut()
-	{
+	private void StartAnimateOut() {
 		mAnimProg = 1f;
 		mAnimTarget = 0f;
-		if (mOnTransitOutPlaySound != null)
-		{
+		if (mOnTransitOutPlaySound != null) {
 			mOnTransitOutPlaySound.played = false;
 		}
 		DrawAnimFrame(mAnimProg);

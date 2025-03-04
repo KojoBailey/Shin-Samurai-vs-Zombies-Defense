@@ -225,21 +225,30 @@ public class SUIButton : SUIWidget
 		}
 	}
 
-	public bool autoscaleKeepAspectRatio
-	{
-		get
-		{
-			if (mSprite != null)
-			{
+	public bool autoscaleKeepAspectRatio {
+		get {
+			if (mSprite != null) {
 				return mSprite.autoscaleKeepAspectRatio;
 			}
 			return true;
 		}
-		set
-		{
-			if (mSprite != null)
-			{
+		set {
+			if (mSprite != null) {
 				mSprite.autoscaleKeepAspectRatio = value;
+			}
+		}
+	}
+
+	public bool autoscaleFitWidth {
+		get {
+			if (mSprite != null) {
+				return mSprite.autoscaleFitWidth;
+			}
+			return true;
+		}
+		set {
+			if (mSprite != null) {
+				mSprite.autoscaleFitWidth = value;
 			}
 		}
 	}
@@ -366,9 +375,9 @@ public class SUIButton : SUIWidget
 		}
 	}
 
-	protected override void updatePosition()
+	protected override void updateTransform()
 	{
-		base.updatePosition();
+		base.updateTransform();
 		UpdateLayout();
 	}
 

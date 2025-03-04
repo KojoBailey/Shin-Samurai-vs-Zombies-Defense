@@ -3,90 +3,72 @@ using UnityEngine;
 
 public class SUIScrollList : SUIProcess
 {
-	public enum ScrollDirection
-	{
+	public enum ScrollDirection {
 		Vertical = 0,
 		Horizontal = 1
 	}
 
-	public abstract class Cell : SUIProcess
-	{
+	public abstract class Cell : SUIProcess {
 		protected float mAlpha = 1f;
 
 		protected float mTransitionAlpha = 1f;
 
-		public virtual Vector2 position
-		{
-			set
-			{
+		public virtual Vector2 position {
+			set {
 			}
 		}
 
-		public virtual bool visible
-		{
-			set
-			{
+		public virtual bool visible {
+			set {
 			}
 		}
 
-		public float alpha
-		{
-			get
-			{
+		public float alpha {
+			get {
 				return mAlpha;
 			}
-			set
-			{
+			set {
 				mAlpha = Mathf.Clamp(value, 0f, 1f);
 				ApplyCombinedAlpha();
 			}
 		}
 
-		public float transitionAlpha
-		{
-			get
-			{
+		public float transitionAlpha {
+			get {
 				return mTransitionAlpha;
 			}
-			set
-			{
+			set {
 				mTransitionAlpha = Mathf.Clamp(value, 0f, 1f);
 				ApplyCombinedAlpha();
 			}
 		}
 
-		public virtual void Update()
-		{
+		public virtual void Update() {
 		}
 
-		public virtual void Destroy()
-		{
+		public virtual void Destroy() {
 		}
 
-		public void EditorRenderOnGUI()
-		{
+		public void EditorRenderOnGUI() {
 		}
 
 		protected abstract void ApplyCombinedAlpha();
 	}
 
-	private class CellEntry
-	{
+	private class CellEntry {
 		public int dataIndex = -1;
 
 		public bool isVisible;
 
 		public Cell cell;
 
-		public CellEntry(Cell c, int i)
-		{
+		public CellEntry(Cell c, int i) {
 			dataIndex = i;
 			cell = c;
 		}
 	}
 
-	public interface IController
-	{
+	public interface IController {
 		void Destroy();
 
 		void Update();
@@ -132,45 +114,34 @@ public class SUIScrollList : SUIProcess
 
 	private List<CellEntry> mCells = new List<CellEntry>();
 
-	public int selection
-	{
-		get
-		{
+	public int selection {
+		get {
 			return mSelectedDataIndex;
 		}
-		set
-		{
+		set {
 			Select(value);
 		}
 	}
 
-	public Vector2 scrollPosition
-	{
-		get
-		{
+	public Vector2 scrollPosition {
+		get {
 			return mFingerScroller.scrollPosition;
 		}
-		set
-		{
+		set {
 			mFingerScroller.scrollPosition = value;
 		}
 	}
 
-	public float alpha
-	{
-		get
-		{
+	public float alpha {
+		get {
 			return mAlpha;
 		}
-		set
-		{
-			if (mAlpha == value)
-			{
+		set {
+			if (mAlpha == value) {
 				return;
 			}
 			mAlpha = value;
-			foreach (CellEntry mCell in mCells)
-			{
+			foreach (CellEntry mCell in mCells) {
 				if (mCell.isVisible)
 				{
 					mCell.cell.transitionAlpha = value;
@@ -179,8 +150,7 @@ public class SUIScrollList : SUIProcess
 		}
 	}
 
-	public SUIScrollList(IController ctrl, Rect area, Vector2 cellsSize, ScrollDirection dir, int numColsOrRows)
-	{
+	public SUIScrollList(IController ctrl, Rect area, Vector2 cellsSize, ScrollDirection dir, int numColsOrRows) {
 		mController = ctrl;
 		mArea = area;
 		mCellsSize = cellsSize;
@@ -192,37 +162,29 @@ public class SUIScrollList : SUIProcess
 		ForceRedrawList();
 	}
 
-	public void Update()
-	{
-		if (mIgnoreTouchesTimer > 0f)
-		{
+	public void Update() {
+		if (mIgnoreTouchesTimer > 0f) {
 			mIgnoreTouchesTimer = Mathf.Max(0f, mIgnoreTouchesTimer - Time.deltaTime);
 			mFingerScroller.touchesEnabled = false;
 		}
-		else
-		{
+		else {
 			mFingerScroller.touchesEnabled = true;
 		}
-		if (mController != null)
-		{
+		if (mController != null) {
 			mController.Update();
 		}
 		mFingerScroller.Update();
 		UpdateList(mFingerScroller.visualScrollPosition);
-		foreach (CellEntry mCell in mCells)
-		{
+		foreach (CellEntry mCell in mCells) {
 			mCell.cell.Update();
 		}
 	}
 
-	public void Destroy()
-	{
-		if (mCells == null)
-		{
+	public void Destroy() {
+		if (mCells == null) {
 			return;
 		}
-		foreach (CellEntry mCell in mCells)
-		{
+		foreach (CellEntry mCell in mCells) {
 			mCell.cell.Destroy();
 		}
 		mCells = null;
@@ -230,91 +192,71 @@ public class SUIScrollList : SUIProcess
 		mController = null;
 	}
 
-	public void ForceRedrawList()
-	{
+	public void ForceRedrawList() {
 		mNumDataEntries = mController.ScrollList_NumEntries();
 		mNumDataLines = Mathf.CeilToInt((float)mNumDataEntries / (float)mNumColsOrRows);
-		if (mSelectedDataIndex >= mNumDataEntries)
-		{
+		if (mSelectedDataIndex >= mNumDataEntries) {
 			mSelectedDataIndex = mNumDataEntries - 1;
 		}
 		CreateCells();
-		if (mScrollDirType == ScrollDirection.Vertical)
-		{
+		if (mScrollDirType == ScrollDirection.Vertical) {
 			mFingerScroller.scrollMax = new Vector2(0f, (float)mNumDataLines * mCellsSize.y - mArea.height);
 		}
-		else
-		{
+		else {
 			mFingerScroller.scrollMax = new Vector2((float)mNumDataLines * mCellsSize.x - mArea.width, 0f);
 		}
 		mFirstCellShown = -1;
 		UpdateList(mFingerScroller.visualScrollPosition);
 	}
 
-	public void TransitInFromBelow()
-	{
-		if (mScrollDirType == ScrollDirection.Vertical)
-		{
+	public void TransitInFromBelow() {
+		if (mScrollDirType == ScrollDirection.Vertical) {
 			scrollPosition = new Vector2(0f, 0f - mArea.height * 4f);
 		}
-		else
-		{
+		else {
 			scrollPosition = new Vector2(0f - mArea.width * 4f, 0f);
 		}
 		mIgnoreTouchesTimer = 1f;
 	}
 
-	public void EditorRenderOnGUI()
-	{
+	public void EditorRenderOnGUI() {
 	}
 
-	private void CreateCells()
-	{
+	private void CreateCells() {
 		int num = ((mScrollDirType != 0) ? Mathf.Min(mNumDataEntries, (Mathf.CeilToInt(mArea.width / mCellsSize.x) + 1) * mNumColsOrRows) : Mathf.Min(mNumDataEntries, (Mathf.CeilToInt(mArea.height / mCellsSize.y) + 1) * mNumColsOrRows));
-		if (num > mCells.Count)
-		{
-			for (int i = mCells.Count; i < num; i++)
-			{
+		if (num > mCells.Count) {
+			for (int i = mCells.Count; i < num; i++) {
 				mCells.Add(new CellEntry(mController.ScrollList_CreateCell(), -1));
 			}
 		}
-		else if (num < mCells.Count)
-		{
+		else if (num < mCells.Count) {
 			int num2 = mCells.Count - num;
-			for (int j = 0; j < num2; j++)
-			{
+			for (int j = 0; j < num2; j++) {
 				mCells[mCells.Count - 1].cell.Destroy();
 				mCells.RemoveAt(mCells.Count - 1);
 			}
 		}
-		foreach (CellEntry mCell in mCells)
-		{
+		foreach (CellEntry mCell in mCells) {
 			mCell.dataIndex = -1;
 		}
 	}
 
-	private void UpdateList(Vector2 topVec)
-	{
+	private void UpdateList(Vector2 topVec) {
 		int num = 0;
 		num = ((mScrollDirType != 0) ? Mathf.Clamp(Mathf.FloorToInt(topVec.x / mCellsSize.x), 0, mNumDataLines - 1) : Mathf.Clamp(Mathf.FloorToInt(topVec.y / mCellsSize.y), 0, mNumDataLines - 1));
 		int num2 = Mathf.Clamp(num * mNumColsOrRows, 0, mNumDataEntries - 1);
-		if (mScrollDirType == ScrollDirection.Vertical)
-		{
+		if (mScrollDirType == ScrollDirection.Vertical) {
 			mFirstCellXorY = 0f - (topVec.y - mCellsSize.y * (float)num);
 		}
-		else
-		{
+		else {
 			mFirstCellXorY = 0f - (topVec.x - mCellsSize.x * (float)num);
 		}
-		if (num2 != mFirstCellShown)
-		{
+		if (num2 != mFirstCellShown) {
 			ChangeShowingCells(num2);
 		}
-		if (mScrollDirType == ScrollDirection.Vertical)
-		{
+		if (mScrollDirType == ScrollDirection.Vertical) {
 			float num3 = mFirstCellXorY;
-			int num4 = 0;
-			{
+			int num4 = 0; {
 				foreach (CellEntry mCell in mCells)
 				{
 					mCell.cell.position = new Vector2(mArea.x + mCellsSize.x * (float)num4, mArea.y + num3);
@@ -330,34 +272,27 @@ public class SUIScrollList : SUIProcess
 		}
 		float num5 = mFirstCellXorY;
 		int num6 = 0;
-		foreach (CellEntry mCell2 in mCells)
-		{
+		foreach (CellEntry mCell2 in mCells) {
 			mCell2.cell.position = new Vector2(mArea.x + num5, mArea.y + mCellsSize.y * (float)num6);
 			num6++;
-			if (num6 >= mNumColsOrRows)
-			{
+			if (num6 >= mNumColsOrRows) {
 				num6 = 0;
 				num5 += mCellsSize.x;
 			}
 		}
 	}
 
-	private void ChangeShowingCells(int firstCell)
-	{
+	private void ChangeShowingCells(int firstCell) {
 		int lastCell = Mathf.Min(firstCell + mCells.Count, mNumDataEntries - 1);
 		ChangeShowingCells(firstCell, lastCell);
 	}
 
-	private void ChangeShowingCells(int firstCell, int lastCell)
-	{
-		if (mCells.Count == 0)
-		{
+	private void ChangeShowingCells(int firstCell, int lastCell) {
+		if (mCells.Count == 0) {
 			return;
 		}
-		if (mFirstCellShown >= 0)
-		{
-			while (firstCell != mFirstCellShown)
-			{
+		if (mFirstCellShown >= 0) {
+			while (firstCell != mFirstCellShown) {
 				if (firstCell < mFirstCellShown)
 				{
 					mCells.Insert(0, mCells[mCells.Count - 1]);
@@ -372,48 +307,40 @@ public class SUIScrollList : SUIProcess
 				}
 			}
 		}
-		else
-		{
+		else {
 			mFirstCellShown = firstCell;
 		}
 		int num = mFirstCellShown;
 		bool flag = false;
-		foreach (CellEntry mCell in mCells)
-		{
-			if (flag)
-			{
+		foreach (CellEntry mCell in mCells) {
+			if (flag) {
 				mCell.cell.visible = false;
 				mCell.isVisible = false;
 				continue;
 			}
 			RedrawCell(mCell, num);
 			num++;
-			if (num > lastCell)
-			{
+			if (num > lastCell) {
 				flag = true;
 			}
 		}
 	}
 
-	private void RedrawCellCursorOnly(CellEntry e, int dataIndex)
-	{
+	private void RedrawCellCursorOnly(CellEntry e, int dataIndex) {
 		bool isVisible = e.isVisible;
 		mController.ScrollList_DrawCellContent(e.cell, dataIndex, dataIndex == mSelectedDataIndex);
 		e.cell.visible = isVisible;
 	}
 
-	private void RedrawCell(CellEntry e, int dataIndex)
-	{
+	private void RedrawCell(CellEntry e, int dataIndex) {
 		e.cell.visible = true;
 		e.isVisible = true;
-		if (e.dataIndex != dataIndex)
-		{
+		if (e.dataIndex != dataIndex) {
 			ForceRedrawCell(e, dataIndex);
 		}
 	}
 
-	private void ForceRedrawCell(CellEntry e, int dataIndex)
-	{
+	private void ForceRedrawCell(CellEntry e, int dataIndex) {
 		e.cell.visible = true;
 		e.isVisible = true;
 		mController.ScrollList_DrawCellContent(e.cell, dataIndex, dataIndex == mSelectedDataIndex);
@@ -422,87 +349,70 @@ public class SUIScrollList : SUIProcess
 		e.dataIndex = dataIndex;
 	}
 
-	private void OnSimpleTouch(Vector2 pos)
-	{
+	private void OnSimpleTouch(Vector2 pos) {
 		Rect rect = ((mScrollDirType != 0) ? new Rect(mFirstCellXorY + mArea.xMin, mArea.yMin, mCellsSize.x, mCellsSize.y) : new Rect(mArea.xMin, mFirstCellXorY + mArea.yMin, mCellsSize.x, mCellsSize.y));
 		CellEntry cellEntry = null;
 		int num = 0;
 		int num2 = 0;
-		foreach (CellEntry mCell in mCells)
-		{
+		foreach (CellEntry mCell in mCells) {
 			Rect rect2 = rect;
-			if (mScrollDirType == ScrollDirection.Vertical)
-			{
+			if (mScrollDirType == ScrollDirection.Vertical) {
 				rect2.xMin += mCellsSize.x * (float)num2;
 				rect2.xMax += mCellsSize.x * (float)num2;
 				rect2.yMin += mCellsSize.y * (float)num;
 				rect2.yMax += mCellsSize.y * (float)num;
 			}
-			else
-			{
+			else {
 				rect2.xMin += mCellsSize.x * (float)num;
 				rect2.xMax += mCellsSize.x * (float)num;
 				rect2.yMin += mCellsSize.y * (float)num2;
 				rect2.yMax += mCellsSize.y * (float)num2;
 			}
-			if (rect2.Contains(pos))
-			{
+			if (rect2.Contains(pos)) {
 				cellEntry = mCell;
 				break;
 			}
 			num2++;
-			if (num2 >= mNumColsOrRows)
-			{
+			if (num2 >= mNumColsOrRows) {
 				num2 = 0;
 				num++;
 			}
 		}
-		if (cellEntry != null && cellEntry.isVisible)
-		{
+		if (cellEntry != null && cellEntry.isVisible) {
 			Select(cellEntry.dataIndex, true);
-			if (onItemTouched != null)
-			{
+			if (onItemTouched != null) {
 				onItemTouched(cellEntry.dataIndex);
 			}
 		}
 	}
 
-	private void Select(int index)
-	{
+	private void Select(int index) {
 		Select(index, false);
 	}
 
-	private void Select(int index, bool playSoundIfChanged)
-	{
+	private void Select(int index, bool playSoundIfChanged) {
 		index = Mathf.Clamp(index, -1, mNumDataEntries - 1);
-		if (index == mSelectedDataIndex)
-		{
+		if (index == mSelectedDataIndex) {
 			return;
 		}
-		if (playSoundIfChanged)
-		{
+		if (playSoundIfChanged) {
 			Singleton<SUISoundManager>.instance.Play("scrollListSelection", mObjectForSounds);
 		}
 		int num = mSelectedDataIndex;
 		mSelectedDataIndex = index;
 		CellEntry cellEntry = null;
-		foreach (CellEntry mCell in mCells)
-		{
-			if (mCell.dataIndex == num)
-			{
+		foreach (CellEntry mCell in mCells) {
+			if (mCell.dataIndex == num) {
 				RedrawCellCursorOnly(mCell, mCell.dataIndex);
 			}
-			else if (mCell.dataIndex == mSelectedDataIndex)
-			{
+			else if (mCell.dataIndex == mSelectedDataIndex) {
 				cellEntry = mCell;
 			}
 		}
-		if (cellEntry != null)
-		{
+		if (cellEntry != null) {
 			RedrawCellCursorOnly(cellEntry, index);
 		}
-		if (onSelectionChanged != null)
-		{
+		if (onSelectionChanged != null) {
 			onSelectionChanged(mSelectedDataIndex);
 		}
 	}

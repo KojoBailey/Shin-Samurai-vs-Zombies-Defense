@@ -13,6 +13,7 @@ public class SUISprite : SUIWidget
 	private Vector2 mHotspot = new Vector2(0.5f, 0.5f);
 
 	private bool mAutoScaleKeepAspectRatio = true;
+	private bool mAutoScaleFitWidth = false;
 
 	private float mHDScaleRatio = 1f;
 
@@ -81,15 +82,22 @@ public class SUISprite : SUIWidget
 		}
 	}
 
-	public bool autoscaleKeepAspectRatio
-	{
-		get
-		{
+	public bool autoscaleKeepAspectRatio {
+		get {
 			return mAutoScaleKeepAspectRatio;
 		}
-		set
-		{
+		set {
 			mAutoScaleKeepAspectRatio = value;
+			updateScale();
+		}
+	}
+
+	public bool autoscaleFitWidth {
+		get {
+			return mAutoScaleFitWidth;
+		}
+		set {
+			mAutoScaleFitWidth = value;
 			updateScale();
 		}
 	}
@@ -210,10 +218,17 @@ public class SUISprite : SUIWidget
 		updateScale();
 	}
 
-	private void updateScale()
-	{
+	private void updateScale() {
 		AutoScaler autoScaler = WeakGlobalInstance<SUIScreen>.instance.autoScaler;
-		Vector2 vector = ((!mAutoScaleKeepAspectRatio) ? new Vector2(autoScaler.toDeviceX((float)mTexture.texture.width * scale.x * mHDScaleRatio), autoScaler.toDeviceY((float)mTexture.texture.height * scale.y * mHDScaleRatio)) : new Vector2(autoScaler.toDevice((float)mTexture.texture.width * scale.x * mHDScaleRatio), autoScaler.toDevice((float)mTexture.texture.height * scale.y * mHDScaleRatio)));
+		Vector2 vector;
+		if (!mAutoScaleKeepAspectRatio) {
+			vector = new Vector2(autoScaler.toDeviceX((float)mTexture.texture.width * scale.x * mHDScaleRatio), autoScaler.toDeviceY((float)mTexture.texture.height * scale.y * mHDScaleRatio));
+		} else if (mAutoScaleFitWidth) {
+			vector.x = autoScaler.toDeviceX((float)mTexture.texture.width * scale.x * mHDScaleRatio);
+			vector.y = vector.x * (float)mTexture.texture.height / (float)mTexture.texture.width;
+		} else {
+			vector = new Vector2(autoScaler.toDevice((float)mTexture.texture.width * scale.x * mHDScaleRatio), autoScaler.toDevice((float)mTexture.texture.height * scale.y * mHDScaleRatio));
+		}
 		mTexture.pixelInset = new Rect(0f - vector.x * mHotspot.x, 0f - vector.y * (1f - mHotspot.y), vector.x, vector.y);
 	}
 }

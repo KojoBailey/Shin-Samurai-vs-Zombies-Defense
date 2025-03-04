@@ -1,6 +1,6 @@
 [classic]
 	/ Default Hero Setup
-	defaultHeroID = HeroRonin
+	defaultHeroID = HeroSamurai
 	defaultMeleeWeaponID = Katana
 	defaultRangeWeaponID = Bow
 	

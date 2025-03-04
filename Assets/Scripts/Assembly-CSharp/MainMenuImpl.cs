@@ -4,15 +4,15 @@ using UnityEngine;
 public class MainMenuImpl : SceneBehaviour
 {
 	private SUILayout mLayout;
-	private DialogHandler mDialogHandler;
-	public AudioClip ClickSFX;
-	private YesNoDialog m_quitDialog;
-	private SUIButton m_cheatsBtn;
+	private DialogHandler dialog_handler;
+	public AudioClip click_sfx;
+	private YesNoDialog quit_dialog;
+	private SUIButton cheats_button;
 
 	// Scrolling blood
-	private SpriteScreenScroller mScrollBloodTop;
-	private SpriteScreenScroller mScrollBloodBottom;
-	private float mBloodSpeed = 1000f;
+	private SpriteScreenScroller scrolling_blood_top;
+	private SpriteScreenScroller scrolling_blood_bottom;
+	private float blood_speed = 1000f;
 
 	private void Start() {
 		// Set up layout.
@@ -21,41 +21,40 @@ public class MainMenuImpl : SceneBehaviour
 		mLayout.AnimateIn();
 
 		// Version text (top-right).
-		mLayout.GetLabel("version").text = Singleton<GameVersion>.instance.ToString() + ((!SingletonMonoBehaviour<ResourcesManager>.instance.hasOnlineBundleLoaded) ? string.Empty : "+");
+		mLayout.GetLabel("version").text = "version " + Singleton<GameVersion>.instance.ToString() + ((!SingletonMonoBehaviour<ResourcesManager>.instance.hasOnlineBundleLoaded) ? string.Empty : "+");
 		
 		// Cheats - debug only.
-		m_cheatsBtn = mLayout.GetButton("cheats");
-		m_cheatsBtn.scale = new Vector2(2f, 2f);
+		cheats_button = mLayout.GetButton("cheats");
 		if (Debug.isDebugBuild)
-			m_cheatsBtn.onButtonPressed = ShowCheatsScreen;
+			cheats_button.onButtonPressed = ShowCheatsScreen;
 		else
-			m_cheatsBtn.visible = false;
+			cheats_button.visible = false;
 
 		// Scrolling blood UI.
-		mScrollBloodTop = new SpriteScreenScroller(mLayout.GetSprite("bloodTop"));
-		mScrollBloodTop.ScrollHorizontally(mBloodSpeed);
-		mScrollBloodBottom = new SpriteScreenScroller(mLayout.GetSprite("bloodBottom"));
-		mScrollBloodBottom.ScrollHorizontally(0f - mBloodSpeed);
+		scrolling_blood_top = new SpriteScreenScroller(mLayout.GetSprite("bloodTop"));
+		scrolling_blood_top.ScrollHorizontally(blood_speed);
+		scrolling_blood_bottom = new SpriteScreenScroller(mLayout.GetSprite("bloodBottom"));
+		scrolling_blood_bottom.ScrollHorizontally(0f - blood_speed);
 
 		EnableButtons();
 
 		// Welcome back and daily rewards.
-		IDialog specialDialog2 = null;
-		specialDialog2 = Singleton<FreebiesManager>.instance.CheckForWelcomeBackGift();
-		if (specialDialog2 != null) {
-			((DailyRewardDialog)specialDialog2).onYesPressed = delegate {
+		IDialog special_dialog = null;
+		special_dialog = Singleton<FreebiesManager>.instance.CheckForWelcomeBackGift();
+		if (special_dialog != null) {
+			((DailyRewardDialog)special_dialog).onYesPressed = delegate {
 				GoToScene(delegate {
 					Singleton<MenusFlow>.instance.LoadScene("BoosterPackStore");
 				});
 			};
 		} else {
-			specialDialog2 = DailyRewardsManager.CheckForDailyReward();
+			special_dialog = DailyRewardsManager.CheckForDailyReward();
 		}
-		if (specialDialog2 == null) {
-			specialDialog2 = Singleton<FreebiesManager>.instance.CheckForGiveOnceGift();
+		if (special_dialog == null) {
+			special_dialog = Singleton<FreebiesManager>.instance.CheckForGiveOnceGift();
 		}
-		if (specialDialog2 != null) {
-			StartDialog(specialDialog2);
+		if (special_dialog != null) {
+			StartDialog(special_dialog);
 		}
 	}
 
@@ -74,20 +73,20 @@ public class MainMenuImpl : SceneBehaviour
 		if (SceneBehaviourUpdate()) return;
 
 		// Update blood positions.
-		mScrollBloodTop.Update();
-		mScrollBloodBottom.Update();
-		if (mBloodSpeed > 100f) {
-			mBloodSpeed = (mBloodSpeed - 100f) * Mathf.Clamp(1f - SUIScreen.deltaTime * 2f, 0f, 0.98f) + 100f;
-			mScrollBloodTop.speed = mBloodSpeed;
-			mScrollBloodBottom.speed = 0f - mBloodSpeed;
+		scrolling_blood_top.Update();
+		scrolling_blood_bottom.Update();
+		if (blood_speed > 100f) {
+			blood_speed = (blood_speed - 100f) * Mathf.Clamp(1f - SUIScreen.deltaTime * 2f, 0f, 0.98f) + 100f;
+			scrolling_blood_top.speed = blood_speed;
+			scrolling_blood_bottom.speed = 0f - blood_speed;
 		}
 
 		// Dialog handler.
-		if (mDialogHandler != null) {
-			mDialogHandler.Update();
-			if (mDialogHandler.isDone) {
-				mDialogHandler.Destroy();
-				mDialogHandler = null;
+		if (dialog_handler != null) {
+			dialog_handler.Update();
+			if (dialog_handler.isDone) {
+				dialog_handler.Destroy();
+				dialog_handler = null;
 			}
 			return;
 		}
@@ -97,57 +96,56 @@ public class MainMenuImpl : SceneBehaviour
 
 		// Check for quitting.
 		if (Input.GetKeyUp(KeyCode.Escape)) {
-			m_quitDialog = new YesNoDialog(Singleton<Localizer>.instance.Get("quit_confirm"), false, delegate {
+			quit_dialog = new YesNoDialog(Singleton<Localizer>.instance.Get("quit_confirm"), false, delegate {
 				StartCoroutine(CoQuit());
 			}, delegate{});
-			m_quitDialog.priority = 500f;
-			StartDialog(m_quitDialog);
+			quit_dialog.priority = 500f;
+			StartDialog(quit_dialog);
 		}
 	}
 
 	private void EnableButtons() {
 		// The two heroes. Click to select a mode.
 			// Classic Mode
-		mLayout.GetButton("samurai").onButtonPressed = delegate
-		{
+		mLayout.GetButton("samurai").onButtonPressed = delegate {
 			if ((Singleton<Profile>.instance.waveToBeat == 1 && Singleton<Profile>.instance.GetWaveLevel(2) == 0) || Singleton<Profile>.instance.readyToStartBonusWave) {
-				GoToScene(delegate
-				{
+				GoToScene(delegate {
 					WaveManager.LoadNextWaveLevel();
 				});
 			}
 			else {
-				Singleton<Profile>.instance.tapFeatureAdsCnt = Singleton<Profile>.instance.tapFeatureAdsCnt + 1;
+				Singleton<Profile>.instance.tapFeatureAdsCnt++;
 				Singleton<Profile>.instance.Save();
-				GoToScene(delegate
-				{
+				GoToScene(delegate {
+					Singleton<PlayModesManager>.instance.selectedMode = "classic";
 					Singleton<MenusFlow>.instance.LoadScene("Store");
 				});
 			}
 		};
 			// Zombies Rising
-		mLayout.GetButton("zombiehero").onButtonPressed = delegate
-		{
-			Singleton<Profile>.instance.tapFeatureAdsCnt = Singleton<Profile>.instance.tapFeatureAdsCnt + 1;
+		mLayout.GetButton("zombiehero").onButtonPressed = delegate {
+			Singleton<Profile>.instance.tapFeatureAdsCnt++;
 			Singleton<Profile>.instance.Save();
-			GoToScene(delegate
-			{
+			GoToScene(delegate {
 				Singleton<PlayModesManager>.instance.selectedMode = "zombies";
 				Singleton<MenusFlow>.instance.LoadScene("Store");
 			});
 		};
 
 		// Options.
-		mLayout.GetButton("options").onButtonPressed = delegate
-		{
-			GoToScene(delegate
-			{
+		mLayout.GetButton("options").onButtonPressed = delegate {
+			GoToScene(delegate {
 				Singleton<MenusFlow>.instance.LoadScene("Options");
 			});
 		};
 
 		// Other games.
-		mLayout.GetButton("otherGames").onButtonPressed = onOtherGames;
+		mLayout.GetButton("otherGames").onButtonPressed = delegate {
+			YesNoDialog yesNoDialog = new YesNoDialog(
+				"Check out Zweronz's various projects via his GitHub and YouTube profiles!", false, delegate{}, null);
+			yesNoDialog.priority = 500f;
+			StartDialog(yesNoDialog);
+		};
 	}
 	private void DisableButtons() {
 		mLayout.GetButton("zombiehero").onButtonPressed = null;
@@ -156,21 +154,14 @@ public class MainMenuImpl : SceneBehaviour
 		mLayout.GetButton("otherGames").onButtonPressed = null;
 	}
 
-	private void onOtherGames() {
-		YesNoDialog yesNoDialog = new YesNoDialog(
-			"Check out Zweronz's various projects via his GitHub and YouTube profiles!", false, delegate{}, null);
-		yesNoDialog.priority = 500f;
-		StartDialog(yesNoDialog);
-	}
-
 	private void StartDialog(IDialog d) {
 		// Remove existing dialog if  open.
-		if (mDialogHandler != null) {
-			mDialogHandler.Destroy();
-			mDialogHandler = null;
+		if (dialog_handler != null) {
+			dialog_handler.Destroy();
+			dialog_handler = null;
 		}
 		// Open new dialog with provided data.
-		mDialogHandler = new DialogHandler(499f, d);
+		dialog_handler = new DialogHandler(499f, d);
 	}
 
 	private void GoToScene(OnSUIGenericCallback menuJump) {
@@ -180,7 +171,7 @@ public class MainMenuImpl : SceneBehaviour
 			menuJump();
 		};
 		WeakGlobalInstance<SUIScreen>.instance.fader.FadeToBlack();
-		base.GetComponent<AudioSource>().PlayOneShot(ClickSFX);
+		base.GetComponent<AudioSource>().PlayOneShot(click_sfx);
 		WeakGlobalInstance<SUIScreen>.instance.inputs.processInputs = false;
 	}
 

@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class FingerScroller
-{
+public class FingerScroller {
 	private const int kVelocityHistoryNum = 3;
 
 	private const float kScrollSlowDownFactor = 0.1f;
@@ -38,131 +37,99 @@ public class FingerScroller
 
 	private Vector2 mAutoScrollTarget;
 
-	public Rect area
-	{
-		get
-		{
+	public Rect area {
+		get {
 			return mArea;
 		}
-		set
-		{
+		set {
 			mArea = value;
 		}
 	}
 
-	public float extraTouchBorder
-	{
-		get
-		{
+	public float extraTouchBorder {
+		get {
 			return mExtraTouchBorder;
 		}
-		set
-		{
+		set {
 			mExtraTouchBorder = value;
 		}
 	}
 
-	public Vector2 scrollMax
-	{
-		get
-		{
+	public Vector2 scrollMax {
+		get {
 			return mMaxScroll;
 		}
-		set
-		{
+		set {
 			mMaxScroll = new Vector2(Mathf.Max(0f, value.x), Mathf.Max(0f, value.y));
 		}
 	}
 
-	public Vector2 scrollPosition
-	{
-		get
-		{
+	public Vector2 scrollPosition {
+		get {
 			return mScrollPosition;
 		}
-		set
-		{
+		set {
 			mScrollPosition = value;
 		}
 	}
 
-	public OnSUIVector2Callback onSimpleTouch
-	{
-		get
-		{
+	public OnSUIVector2Callback onSimpleTouch {
+		get {
 			return mOnSimpleTouch;
 		}
-		set
-		{
+		set {
 			mOnSimpleTouch = value;
 		}
 	}
 
-	public bool useOverShoot
-	{
-		get
-		{
+	public bool useOverShoot {
+		get {
 			return mUseOvershoot;
 		}
-		set
-		{
+		set {
 			mUseOvershoot = value;
 		}
 	}
 
-	public Vector2 visualScrollPosition
-	{
-		get
-		{
+	public Vector2 visualScrollPosition {
+		get {
 			Vector2 result = mScrollPosition;
-			if (result.x < 0f)
-			{
+			if (result.x < 0f) {
 				result.x /= 3f;
 			}
-			if (result.y < 0f)
-			{
+			if (result.y < 0f) {
 				result.y /= 3f;
 			}
-			if (result.x > mMaxScroll.x)
-			{
+			if (result.x > mMaxScroll.x) {
 				result.x = (result.x - mMaxScroll.x) / 3f + mMaxScroll.x;
 			}
-			if (result.y > mMaxScroll.y)
-			{
+			if (result.y > mMaxScroll.y) {
 				result.y = (result.y - mMaxScroll.y) / 3f + mMaxScroll.y;
 			}
 			return result;
 		}
 	}
 
-	public int snapToGrid
-	{
-		get
-		{
+	public int snapToGrid {
+		get {
 			return mSnapToGrid;
 		}
-		set
-		{
+		set {
 			mSnapToGrid = value;
 		}
 	}
 
-	public bool touchesEnabled
-	{
-		get
-		{
+	public bool touchesEnabled {
+		get {
 			return mTouchesEnabled;
 		}
-		set
-		{
+		set {
 			mTouchesEnabled = value;
 		}
 	}
 
-	public FingerScroller()
-	{
-		if (SUIScreen.isDeviceRetina)
-		{
+	public FingerScroller() {
+		if (SUIScreen.isDeviceRetina) {
 			kScrollTreshold *= 2f;
 		}
 		mTouchStart = kInvalid;
@@ -172,203 +139,167 @@ public class FingerScroller
 		mScrollPosition.x = 5f;
 	}
 
-	public void Update()
-	{
+	public void Update() {
 		mBounceFactor = Mathf.Clamp(1f - SUIScreen.deltaTime * 6f, 0f, 0.99f);
-		if (mTouchesEnabled && WeakGlobalInstance<SUIScreen>.instance.inputs.isTouching)
-		{
+		if (mTouchesEnabled && WeakGlobalInstance<SUIScreen>.instance.inputs.isTouching) {
 			Vector2 position = WeakGlobalInstance<SUIScreen>.instance.inputs.position;
-			if (mTouchStart == kInvalid)
-			{
+			if (mTouchStart == kInvalid) {
 				BeginTouch(position);
-			}
-			else
-			{
+			} else {
 				ContinueTouch(position);
 			}
 			return;
 		}
-		if (mTouchStart != kInvalid)
-		{
+		if (mTouchStart != kInvalid) {
 			EndTouch();
 		}
-		if (mAutoScrollTarget != kInvalid)
-		{
+
+		float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
+		if (Mathf.Abs(mouseScroll) > 0.01f) {
+			mScrollPosition.y -= mouseScroll * 500f; // Scroll sensitivity
+			mScrollPosition = SnapToMax(mScrollPosition);
+		}
+
+		if (mAutoScrollTarget != kInvalid) {
 			UpdateAutoScroll();
 			return;
 		}
 		UpdateAutoBouncing();
-		if (mSnapToGrid != 0)
-		{
+		if (mSnapToGrid != 0) {
 			UpdateSnapTo();
 		}
 	}
 
-	public void ScrollTo(Vector2 target)
-	{
+	public void ScrollTo(Vector2 target) {
 		mAutoScrollTarget = target;
 	}
 
-	private void ClearVelocityHistory()
-	{
-		for (int i = 0; i < 3; i++)
-		{
+	private void ClearVelocityHistory() {
+		for (int i = 0; i < 3; i++) {
 			mPreviousVelocities[i] = kInvalid;
 		}
 	}
 
-	private void BeginTouch(Vector2 touchPos)
-	{
+	private void BeginTouch(Vector2 touchPos) {
 		Rect rect = new Rect(mArea.xMin - mExtraTouchBorder, mArea.yMin - mExtraTouchBorder, mArea.width + mExtraTouchBorder * 2f, mArea.height + mExtraTouchBorder * 2f);
-		if (WeakGlobalInstance<SUIScreen>.instance.inputs.justTouched && rect.Contains(touchPos))
-		{
+		if (WeakGlobalInstance<SUIScreen>.instance.inputs.justTouched && rect.Contains(touchPos)) {
 			mTouchStart = touchPos;
 			mDragMode = mOnSimpleTouch == null;
 			ClearVelocityHistory();
 		}
 	}
 
-	private void ContinueTouch(Vector2 pos)
-	{
+	private void ContinueTouch(Vector2 pos) {
 		mAutoScrollTarget = kInvalid;
-		if (!mDragMode)
-		{
+		if (!mDragMode) {
 			Vector2 vector = pos - mTouchStart;
-			if (Mathf.Abs(vector.y) >= kScrollTreshold || Mathf.Abs(vector.x) >= kScrollTreshold)
-			{
+			if (Mathf.Abs(vector.y) >= kScrollTreshold || Mathf.Abs(vector.x) >= kScrollTreshold) {
 				mDragMode = true;
 			}
 		}
-		if (mDragMode)
-		{
+		if (mDragMode) {
 			Vector2 vector2 = pos - mTouchStart;
 			mScrollPosition -= vector2;
-			if (!mUseOvershoot)
-			{
+			if (!mUseOvershoot) {
 				mScrollPosition = SnapToMax(mScrollPosition);
 			}
 			mTouchStart = pos;
-			for (int i = 0; i < 2; i++)
-			{
+			for (int i = 0; i < 2; i++) {
 				mPreviousVelocities[i + 1] = mPreviousVelocities[i];
 			}
 			mPreviousVelocities[0] = new Vector2((0f - vector2.x) / SUIScreen.deltaTime, (0f - vector2.y) / SUIScreen.deltaTime);
 		}
 	}
 
-	private void EndTouch()
-	{
+	private void EndTouch() {
 		mAutoScrollTarget = kInvalid;
 		Vector2 v = mTouchStart;
 		mTouchStart = kInvalid;
-		if (mDragMode)
-		{
+		if (mDragMode) {
 			mSwipeVelocity = Vector2.zero;
 			int num = 0;
-			for (int i = 0; i < 3; i++)
-			{
+			for (int i = 0; i < 3; i++) {
 				if (mPreviousVelocities[i] != kInvalid)
 				{
 					num++;
 					mSwipeVelocity += mPreviousVelocities[i];
 				}
 			}
-			if (num > 0)
-			{
+			if (num > 0) {
 				mSwipeVelocity.x /= num;
 				mSwipeVelocity.y /= num;
 			}
 		}
-		else if (mOnSimpleTouch != null)
-		{
+		else if (mOnSimpleTouch != null) {
 			mOnSimpleTouch(v);
 		}
 	}
 
-	private void UpdateAutoScroll()
-	{
+	private void UpdateAutoScroll() {
 		mSwipeVelocity = Vector2.zero;
 		mScrollPosition.x = (mAutoScrollTarget.x - mScrollPosition.x) * SUIScreen.deltaTime + mScrollPosition.x;
 		mScrollPosition.y = (mAutoScrollTarget.y - mScrollPosition.y) * SUIScreen.deltaTime + mScrollPosition.y;
-		if (Mathf.Abs(mScrollPosition.x - mAutoScrollTarget.x) < 1f && Mathf.Abs(mScrollPosition.y - mAutoScrollTarget.y) < 1f)
-		{
+		if (Mathf.Abs(mScrollPosition.x - mAutoScrollTarget.x) < 1f && Mathf.Abs(mScrollPosition.y - mAutoScrollTarget.y) < 1f) {
 			mScrollPosition = mAutoScrollTarget;
 			mAutoScrollTarget = kInvalid;
 		}
 	}
 
-	private void UpdateAutoBouncing()
-	{
-		if (mScrollPosition.x < 0f)
-		{
+	private void UpdateAutoBouncing() {
+		if (mScrollPosition.x < 0f) {
 			mScrollPosition.x *= mBounceFactor;
-			if (mScrollPosition.x > -1f)
-			{
+			if (mScrollPosition.x > -1f) {
 				mScrollPosition.x = 0f;
 			}
 		}
-		if (mScrollPosition.y < 0f)
-		{
+		if (mScrollPosition.y < 0f) {
 			mScrollPosition.y *= mBounceFactor;
-			if (mScrollPosition.y > -1f)
-			{
+			if (mScrollPosition.y > -1f) {
 				mScrollPosition.y = 0f;
 			}
 		}
-		if (mScrollPosition.x > mMaxScroll.x)
-		{
+		if (mScrollPosition.x > mMaxScroll.x) {
 			mScrollPosition.x = (mScrollPosition.x - mMaxScroll.x) * mBounceFactor + mMaxScroll.x;
-			if (mScrollPosition.x < mMaxScroll.x - 1f)
-			{
+			if (mScrollPosition.x < mMaxScroll.x - 1f) {
 				mScrollPosition.x = mMaxScroll.x;
 			}
 		}
-		if (mScrollPosition.y > mMaxScroll.y)
-		{
+		if (mScrollPosition.y > mMaxScroll.y) {
 			mScrollPosition.y = (mScrollPosition.y - mMaxScroll.y) * mBounceFactor + mMaxScroll.y;
-			if (mScrollPosition.y < mMaxScroll.y - 1f)
-			{
+			if (mScrollPosition.y < mMaxScroll.y - 1f) {
 				mScrollPosition.y = mMaxScroll.y;
 			}
 		}
-		if (!mUseOvershoot)
-		{
+		if (!mUseOvershoot) {
 			mScrollPosition = SnapToMax(mScrollPosition);
 		}
-		if (mSwipeVelocity.x != 0f)
-		{
+		if (mSwipeVelocity.x != 0f) {
 			mScrollPosition.x += mSwipeVelocity.x * SUIScreen.deltaTime;
 			mSwipeVelocity.x *= Mathf.Clamp(1f - SUIScreen.deltaTime / 0.1f, 0f, 1f);
 		}
-		if (mSwipeVelocity.y != 0f)
-		{
+		if (mSwipeVelocity.y != 0f) {
 			mScrollPosition.y += mSwipeVelocity.y * SUIScreen.deltaTime;
 			mSwipeVelocity.y *= Mathf.Clamp(1f - SUIScreen.deltaTime / 0.1f, 0f, 1f);
 		}
 	}
 
-	private void UpdateSnapTo()
-	{
+	private void UpdateSnapTo() {
 		mScrollPosition.x = SnapToGrid(mScrollPosition.x, mMaxScroll.x);
 		mScrollPosition.y = SnapToGrid(mScrollPosition.y, mMaxScroll.y);
 	}
 
-	private float SnapToGrid(float val, float max)
-	{
-		if (val <= 0f || val >= max)
-		{
+	private float SnapToGrid(float val, float max) {
+		if (val <= 0f || val >= max) {
 			return val;
 		}
 		int num = (int)val % mSnapToGrid;
-		if (num < mSnapToGrid / 2)
-		{
+		if (num < mSnapToGrid / 2) {
 			return mSnapToGrid * ((int)val / mSnapToGrid);
 		}
 		return mSnapToGrid * ((int)val / mSnapToGrid + 1);
 	}
 
-	private Vector2 SnapToMax(Vector2 pos)
-	{
+	private Vector2 SnapToMax(Vector2 pos) {
 		Vector2 result = pos;
 		result.x = Mathf.Clamp(result.x, 0f, mMaxScroll.x);
 		result.y = Mathf.Clamp(result.y, 0f, mMaxScroll.y);

@@ -87,10 +87,10 @@ transitionSpeed = 1.5
 [bg]
 	type = sprite
 	file = Sprites/Menus/bg_start_screen_01
-	keepAspectRatio = false
+	fitWidth = true
 	priority = 0
 	hotspot = 0, 0
-	position = 0, 0
+	position = 0, -130
 
 [bloodTop]
 	type = sprite
@@ -123,9 +123,9 @@ transitionSpeed = 1.5
 [glowEyes]
 	type = sprite
 	file = Sprites/Menus/start_screen_eyes_glow
-	keepAspectRatio = false
+	fitWidth = true
 	priority = 0.15
-	position = 455, 396
+	position = 455, 531
 	[effect]
 		[alphaPingPong]
 			min = 0.2

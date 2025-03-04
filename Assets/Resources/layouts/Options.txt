@@ -38,7 +38,22 @@ transitionSpeed = 1.0
 [about]
 	type = button
 	normalFrame = Sprites/Localized/legal_button
-	position = 512, 250
+	position = 512, 180
+	offsetWhenPressed = 4, 4
+	priority = 5
+	[transition]
+		[position]
+			anim = BackOut
+			offset = -110, 0
+			animRange = 0.3, 1
+		[alpha]
+			alpha = 0
+			animRange = 0.3, 1
+
+[language]
+	type = button
+	normalFrame = Sprites/Localized/language_button
+	position = 512, 330
 	offsetWhenPressed = 4, 4
 	priority = 5
 	[transition]
@@ -53,7 +68,7 @@ transitionSpeed = 1.0
 [credits]
 	type = button
 	normalFrame = Sprites/Localized/credits_button
-	position = 512, 400
+	position = 512, 480
 	offsetWhenPressed = 4, 4
 	priority = 5
 	[transition]
@@ -68,7 +83,7 @@ transitionSpeed = 1.0
 [privacy]
 	type = button
 	normalFrame = Sprites/Localized/privacy_terms
-	position = 512, 550
+	position = 512, 630
 	offsetWhenPressed = 4, 4
 	priority = 5
 	[transition]

@@ -1,74 +1,62 @@
 using UnityEngine;
 
-public class OptionsImpl : SceneBehaviour
-{
+public class OptionsImpl : SceneBehaviour {
 	private SUILayout mLayout;
 
 	private YesNoDialog mConfirmDialog;
 
 	private SUILayout mAboutDialog;
 
-	private void Start()
-	{
+	private void Start() {
 		WeakGlobalInstance<SUIScreen>.instance.fader.FadeFromBlack();
 		mLayout = new SUILayout("Layouts/Options");
 		mLayout.AnimateIn();
-		((SUIButton)mLayout["backBtn"]).onButtonPressed = delegate
-		{
+		mLayout.GetButton("backBtn").onButtonPressed = delegate {
 			GotoScene("MainMenu");
 		};
-		((SUIButton)mLayout["credits"]).onButtonPressed = delegate
-		{
+		mLayout.GetButton("credits").onButtonPressed = delegate {
 			GotoScene("Credits");
 		};
-		((SUIButton)mLayout["about"]).onButtonPressed = PopAboutInfo;
-		((SUIButton)mLayout["privacy"]).onButtonPressed = ShowPrivacy;
-		((SUIButton)mLayout["resetSave"]).onButtonPressed = PopResetDataConfirmDialog;
-		((SUIButton)mLayout["resetSave"]).visible = false;
+		mLayout.GetButton("about").onButtonPressed = PopAboutInfo;
+		mLayout.GetButton("language").onButtonPressed = PopLanguageDialog;
+		mLayout.GetButton("privacy").onButtonPressed = ShowPrivacy;
+		mLayout.GetButton("resetSave").onButtonPressed = PopResetDataConfirmDialog;
+		mLayout.GetButton("resetSave").visible = false;
 	}
 
-	private void Update()
-	{
-		if (SceneBehaviourUpdate())
-		{
+	private void Update() {
+		if (SceneBehaviourUpdate()) {
 			return;
 		}
-		if (mAboutDialog != null)
-		{
+		if (mAboutDialog != null) {
 			mAboutDialog.Update();
-			if (Input.GetKeyUp(KeyCode.Escape))
-			{
+			if (Input.GetKeyUp(KeyCode.Escape)) {
 				mAboutDialog.Destroy();
 				mAboutDialog = null;
 			}
 		}
-		else if (mConfirmDialog != null)
-		{
+		else if (mConfirmDialog != null) {
 			mConfirmDialog.Update();
-			if (mConfirmDialog.isDone)
-			{
+			if (mConfirmDialog.isDone) {
 				mConfirmDialog.Destroy();
 				mConfirmDialog = null;
 			}
 		}
-		else
-		{
+		else {
 			mLayout.Update();
-			if (Input.GetKeyUp(KeyCode.Escape))
-			{
+			if (Input.GetKeyUp(KeyCode.Escape)) {
 				GotoScene("MainMenu");
 			}
 		}
 	}
 
-	private void GotoScene(string sceneName)
-	{
-		((SUIButton)mLayout["backBtn"]).onButtonPressed = null;
-		((SUIButton)mLayout["credits"]).onButtonPressed = null;
-		((SUIButton)mLayout["about"]).onButtonPressed = null;
-		((SUIButton)mLayout["resetSave"]).onButtonPressed = null;
-		WeakGlobalInstance<SUIScreen>.instance.fader.onFadingDone = delegate
-		{
+	private void GotoScene(string sceneName) {
+		mLayout.GetButton("backBtn").onButtonPressed = null;
+		mLayout.GetButton("credits").onButtonPressed = null;
+		mLayout.GetButton("about").onButtonPressed = null;
+		mLayout.GetButton("language").onButtonPressed = null;
+		mLayout.GetButton("resetSave").onButtonPressed = null;
+		WeakGlobalInstance<SUIScreen>.instance.fader.onFadingDone = delegate {
 			Singleton<MenusFlow>.instance.LoadScene(sceneName);
 		};
 		WeakGlobalInstance<SUIScreen>.instance.fader.FadeToBlack();
@@ -76,30 +64,38 @@ public class OptionsImpl : SceneBehaviour
 		WeakGlobalInstance<SUIScreen>.instance.inputs.processInputs = false;
 	}
 
-	private void PopResetDataConfirmDialog()
-	{
-		mConfirmDialog = new YesNoDialog(Singleton<Localizer>.instance.Get("options_confirmreset"), false, delegate
-		{
+	private void PopResetDataConfirmDialog() {
+		mConfirmDialog = new YesNoDialog(Singleton<Localizer>.instance.Get("options_confirmreset"), false, delegate {
 			Singleton<Profile>.instance.ResetData();
-		}, delegate
-		{
+		}, delegate {
 		});
 		mConfirmDialog.priority = 500f;
 	}
 
-	private void PopAboutInfo()
-	{
+	private void PopLanguageDialog() {
+		if (Singleton<GameVersion>.instance.language == "Default") {
+			mConfirmDialog = new YesNoDialog("Switch to Japanese?", false, delegate {
+				Singleton<GameVersion>.instance.language = "Japanese";
+				GotoScene("MainMenu");
+			}, delegate {});
+		} else if (Singleton<GameVersion>.instance.language == "Japanese") {
+			mConfirmDialog = new YesNoDialog("英語を切り替わるか？", false, delegate {
+				Singleton<GameVersion>.instance.language = "English";
+				GotoScene("MainMenu");
+			}, delegate {});
+		}
+		mConfirmDialog.priority = 500f;
+	}
+
+	private void PopAboutInfo() {
 		string text = string.Empty;
 		SDFTreeNode sDFTreeNode = SingletonMonoBehaviour<ResourcesManager>.instance.Open("Text/" + Singleton<Localizer>.instance.Get("legal_file"));
-		for (int i = 0; i < sDFTreeNode.attributeCount; i++)
-		{
+		for (int i = 0; i < sDFTreeNode.attributeCount; i++) {
 			string text2 = sDFTreeNode[i];
-			if (text2 == "*version")
-			{
+			if (text2 == "*version") {
 				text2 = "v" + Singleton<GameVersion>.instance.ToString();
 			}
-			if (text != string.Empty)
-			{
+			if (text != string.Empty) {
 				text += "\n";
 			}
 			text += text2;
@@ -108,10 +104,8 @@ public class OptionsImpl : SceneBehaviour
 		((SUISprite)mAboutDialog["panel"]).scale = new Vector2(1f, 1.1f);
 		((SUILabel)mAboutDialog["text"]).text = text;
 		mAboutDialog.basePriority = 500f;
-		((SUIButton)mAboutDialog["back"]).onButtonPressed = delegate
-		{
-			if (mAboutDialog != null)
-			{
+		((SUIButton)mAboutDialog["back"]).onButtonPressed = delegate {
+			if (mAboutDialog != null) {
 				mAboutDialog.Destroy();
 				mAboutDialog = null;
 			}
@@ -119,8 +113,7 @@ public class OptionsImpl : SceneBehaviour
 		mAboutDialog.AnimateIn();
 	}
 
-	private void ShowPrivacy()
-	{
+	private void ShowPrivacy() {
 		Application.OpenURL("http://www.glu.com/legal");
 	}
 }

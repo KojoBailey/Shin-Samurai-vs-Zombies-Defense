@@ -12,119 +12,93 @@ public class SUIWidget : SUIProcess, IHasVisualAttributes
 
 	private Vector2 mScale;
 
-	public Vector2 position
-	{
-		get
-		{
+	public Vector2 position {
+		get {
 			return mPosition;
 		}
-		set
-		{
-			if (mPosition != value)
-			{
+		set {
+			if (mPosition != value) {
 				mPosition = value;
-				updatePosition();
+				updateTransform();
 			}
 		}
 	}
 
-	public float priority
-	{
-		get
-		{
+	public float priority {
+		get {
 			return mPriority;
 		}
-		set
-		{
+		set {
 			mPriority = value;
-			updatePosition();
+			updateTransform();
 		}
 	}
 
-	public virtual float alpha
-	{
-		get
-		{
+	public virtual float alpha {
+		get {
 			return 1f;
 		}
-		set
-		{
+		set {
 		}
 	}
 
-	public virtual Rect area
-	{
-		get
-		{
+	public virtual Rect area {
+		get {
 			return new Rect(position.x, position.y, 0f, 0f);
 		}
-		set
-		{
+		set {
 			position = new Vector2(value.xMin + value.width / 2f, value.yMin + value.height / 2f);
 		}
 	}
 
-	public virtual bool visible
-	{
-		get
-		{
+	public virtual bool visible {
+		get {
 			return mGameObject.active;
 		}
-		set
-		{
-			if (mGameObject.active != value)
-			{
+		set {
+			if (mGameObject.active != value) {
 				mGameObject.active = value;
 			}
 		}
 	}
 
-	public virtual Vector2 scale
-	{
-		get
-		{
-			return new Vector2(1f, 1f);
+	public virtual Vector2 scale {
+		get {
+			return new Vector2(mScale.x, mScale.y);
 		}
-		set
-		{
+		set {
+			mScale = value;
+			updateTransform();
 		}
 	}
 
-	public GameObject gameObject
-	{
-		get
-		{
+	public GameObject gameObject {
+		get {
 			return mGameObject;
 		}
 	}
 
-	public SUIWidget()
-	{
+	public SUIWidget() {
 		mGameObject = new GameObject();
 		mGameObject.layer = LayerMask.NameToLayer("SamuraiUI");
 		mGOTransformRef = mGameObject.transform;
 		mPosition = new Vector2(0.5f, 0.5f);
-		updatePosition();
+		updateTransform();
 	}
 
-	public virtual void Destroy()
-	{
+	public virtual void Destroy() {
 		mGOTransformRef = null;
 		Object.Destroy(mGameObject);
 		mGameObject = null;
 	}
 
-	public virtual void Update()
-	{
-	}
+	public virtual void Update() {}
 
-	public virtual void EditorRenderOnGUI()
-	{
-	}
+	public virtual void EditorRenderOnGUI() {}
 
-	protected virtual void updatePosition()
-	{
+	protected virtual void updateTransform() {
 		Vector2 vector = SUIUtils.userToUnity(mPosition);
 		mGOTransformRef.position = new Vector3(vector.x, vector.y, mPriority);
+		mGOTransformRef.localScale = new Vector3(mScale.x, mScale.y, 1f);
 	}
 }

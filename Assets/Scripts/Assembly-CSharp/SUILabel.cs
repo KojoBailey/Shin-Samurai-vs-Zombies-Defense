@@ -426,9 +426,9 @@ public class SUILabel : SUIWidget
 		return text2.Trim();
 	}
 
-	protected override void updatePosition()
+	protected override void updateTransform()
 	{
-		base.updatePosition();
+		base.updateTransform();
 		if (mShadow != null)
 		{
 			mShadow.position = position + mShadowOffset;
