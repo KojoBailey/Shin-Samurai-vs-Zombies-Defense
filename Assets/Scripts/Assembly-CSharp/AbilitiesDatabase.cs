@@ -64,6 +64,7 @@ public class AbilitiesDatabase : Singleton<AbilitiesDatabase>
 			mData.Add(new AbilityData("DivineIntervention", OnExecute_DivineIntervention, StoreAvailability_Abilities.GetAbilityUpgrade_DivineIntervention));
 			mData.Add(new AbilityData("SummonTornadoes", OnExecute_SummonTornadoes, StoreAvailability_Abilities.GetAbilityUpgrade_DamageOnly));
 			mData.Add(new AbilityData("GiantWave", OnExecute_GiantWave, StoreAvailability_Abilities.GetAbilityUpgrade_DamageOnly));
+			mData.Add(new AbilityData("GroundShock", OnExecute_GroundShock, StoreAvailability_Abilities.GetAbilityUpgrade_DamageOnly));
 		}
 		else
 		{

@@ -3,7 +3,7 @@
 /	General
 /--------------------------------------------
 
-displayName = @heroe_samurai_name
+displayName = Zombie Samurai
 desc = @zombiehero_desc
 store_levelup = @store_format_level_hero
 icon = Sprites/Icons/hero_zombie01

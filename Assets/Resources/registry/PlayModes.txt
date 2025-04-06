@@ -1,6 +1,6 @@
 [classic]
 	/ Default Hero Setup
-	defaultHeroID = HeroSamurai
+	defaultHeroID = HeroRonin
 	defaultMeleeWeaponID = Katana
 	defaultRangeWeaponID = Bow
 	
@@ -39,6 +39,7 @@
 	layout_ReviveDialog = Layouts/ReviveDialog
 	layout_DebriefingMenu = Layouts/DebriefingMenu
 	layout_MenuWith3D = Layouts/MenuWith3D
+	layout_SelectHeroesMenu = Layouts/SelectHeroesMenu
 	layout_SelectHelpersMenu = Layouts/SelectHelpersMenu
 	layout_AbilitiesEquip = Layouts/AbilitiesEquip
 	layout_CharmEquip = Layouts/CharmEquip

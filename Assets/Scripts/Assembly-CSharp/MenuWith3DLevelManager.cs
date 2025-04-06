@@ -57,7 +57,7 @@ public class MenuWith3DLevelManager : WeakGlobalInstance<MenuWith3DLevelManager>
 		mHintPopup.AddIconScalingFilter("charm", new Vector2(1f, 1f));
 		mHintPopup.position = kHintPosition;
 		mEnemiesPreview = new EnemiesPreview(spawnArea);
-		LoadMenu("SelectHelpersImpl");
+		LoadMenu("SelectHeroesImpl");
 		RenderSettings.fog = false;
 	}
 

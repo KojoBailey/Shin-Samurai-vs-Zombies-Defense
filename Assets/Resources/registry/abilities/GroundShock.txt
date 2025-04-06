@@ -5,7 +5,7 @@
 
 displayName = @ab_groundshock_name
 icon = Sprites/Icons/ab_burst_slam
-waveToUnlock = 100
+waveToUnlock = 1
 coolDown = 15
 damageRadius = 265
 spawnOffset = 275

@@ -1003,6 +1003,7 @@ public class CharacterModelController : MonoBehaviour
 	{
 		if (!(mAnimPlayer.baseAnim == LastRandomAnim(anim)))
 		{
+			Debug.Log("Base Animation set to " + anim + ".");
 			mAnimPlayer.SetBaseAnim(GetRandomAnim(anim));
 			mAnimPlayer.baseAnimSpeed = speedModifier;
 		}

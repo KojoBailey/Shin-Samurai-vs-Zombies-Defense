@@ -1,7 +1,5 @@
-public class Projectile
-{
-	public enum EProjectileType
-	{
+public class Projectile {
+	public enum EProjectileType {
 		None = 0,
 		Arrow = 1,
 		FireArrow = 2,
@@ -31,19 +29,13 @@ public class Projectile
 
 	public Character shooter;
 
-	public virtual bool isDone
-	{
-		get
-		{
+	public virtual bool isDone {
+		get {
 			return false;
 		}
 	}
 
-	public virtual void Update()
-	{
-	}
+	public virtual void Update() {}
 
-	public virtual void Destroy()
-	{
-	}
+	public virtual void Destroy() {}
 }

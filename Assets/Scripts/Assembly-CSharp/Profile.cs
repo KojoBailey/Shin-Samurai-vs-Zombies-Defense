@@ -438,11 +438,11 @@ public class Profile : Singleton<Profile>
 	{
 		get
 		{
-			return Mathf.Max(1, mSavedData.GetValueInt("heroLevel", playModeSubSection));
+			return Mathf.Max(1, mSavedData.GetValueInt("heroLevel", heroID));
 		}
 		set
 		{
-			mSavedData.SetValueInt("heroLevel", Mathf.Max(0, value), playModeSubSection);
+			mSavedData.SetValueInt("heroLevel", Mathf.Max(0, value), heroID);
 		}
 	}
 

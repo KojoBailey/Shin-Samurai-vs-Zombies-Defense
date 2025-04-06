@@ -56,12 +56,9 @@ public class HUDAbilities
 	{
 		if (!Application.isMobilePlatform)
 		{
-			if (mAbilityButtons.Count > 0 && Input.GetKeyDown(KeyCode.R))
-			{
+			if (mAbilityButtons.Count > 0 && Input.GetKeyDown(KeyCode.R)) {
 				mAbilityButtons[0].Trigger();
-			}
-			else if (mAbilityButtons.Count > 1 && Input.GetKeyDown(KeyCode.E))
-			{
+			} else if (mAbilityButtons.Count > 1 && Input.GetKeyDown(KeyCode.E)) {
 				mAbilityButtons[1].Trigger();
 			}
 		}

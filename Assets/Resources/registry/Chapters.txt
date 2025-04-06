@@ -11,6 +11,7 @@
 	Chaos
 	Hell1
 	Hell2
+	Hell3
 
 
 /---------------------------------------------------------------
@@ -51,3 +52,8 @@
 	displayName = @chapter_title_new2
 	icon = Sprites/Icons/wave_hell
 	wavesRange = 61, 70
+
+[Hell3]
+	displayName = @chapter_title_zombiehell3
+	icon = Sprites/Icons/wave_zombie_underworld
+	wavesRange = 71, 71

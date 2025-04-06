@@ -134,4 +134,3 @@ transitionSpeed = 0.5
 [slot4Touch]
 	type = touchArea
 	rect = 429, 535, 90, 90
-
