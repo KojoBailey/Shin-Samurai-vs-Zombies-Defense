@@ -25,8 +25,14 @@ public class SelectHelpersImpl : MenuWith3DLevel
 		WeakGlobalInstance<MenuWith3DLevelManager>.instance.description = string.Empty;
 		mLayout = new SUILayout(Singleton<PlayModesManager>.instance.selectedModeData["layout_SelectHelpersMenu"]);
 		mLayout.AnimateIn();
-		((SUIButton)mLayout["continue"]).onButtonPressed = OnNextMenu;
-		((SUIButton)mLayout["back"]).onButtonPressed = OnPreviousMenu;
+		((SUIButton)mLayout["continue"]).onButtonPressed = delegate
+		{
+			OnChangeMenuButton("AbilitiesEquipImpl");
+		};
+		((SUIButton)mLayout["back"]).onButtonPressed = delegate
+		{
+			OnChangeMenuButton("SelectHeroesImpl");
+		};
 		mSlotGroup = new SlotGroup(mLayout);
 		mSlotGroup.onSelectionChanged = OnSlotSelectionChanged;
 		mListController = new SelectHelpersController(kListArea, kCellSize);
@@ -84,7 +90,7 @@ public class SelectHelpersImpl : MenuWith3DLevel
 			mSlotGroup.Update();
 			if (Input.GetKeyUp(KeyCode.Escape))
 			{
-				OnPreviousMenu();
+				OnChangeMenuButton("SelectHeroesImpl");
 			}
 		}
 	}
@@ -102,23 +108,6 @@ public class SelectHelpersImpl : MenuWith3DLevel
 			}
 		}
 		Singleton<Profile>.instance.SetSelectedHelpers(list);
-	}
-
-	private void OnNextMenu()
-	{
-		SaveChanges();
-		mLayout.onTransitionOver = delegate
-		{
-			WeakGlobalInstance<MenuWith3DLevelManager>.instance.LoadMenu("AbilitiesEquipImpl");
-		};
-		mLayout.AnimateOut();
-		WeakGlobalInstance<SUIScreen>.instance.inputs.processInputs = false;
-	}
-
-	private void OnPreviousMenu()
-	{
-		SaveChanges();
-		WeakGlobalInstance<MenuWith3DLevelManager>.instance.GoToMenu("Store");
 	}
 
 	private void OnChangeMenuButton(string newMenu)

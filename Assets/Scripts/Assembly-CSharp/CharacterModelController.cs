@@ -685,13 +685,10 @@ public class CharacterModelController : MonoBehaviour
 	{
 		if (!(projectilePrefab == null))
 		{
-			if (!v && mProjectileInstance != null)
-			{
+			if (!v && mProjectileInstance != null) {
 				UnityEngine.Object.Destroy(mProjectileInstance);
 				mProjectileInstance = null;
-			}
-			else if (v && mProjectileInstance == null && (bool)projectilePrefab && mAutoPaperdoll.HasJoint("arrow"))
-			{
+			} else if (v && mProjectileInstance == null && (bool)projectilePrefab && mAutoPaperdoll.HasJoint("arrow")) {
 				mProjectileInstance = mAutoPaperdoll.InstantiateObjectOnJoint(projectilePrefab, "arrow");
 			}
 		}

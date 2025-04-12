@@ -89,6 +89,9 @@ public class HUDSmithy
 			UpdateBarScales();
 			UpdateResourceCounter();
 			UpdateLevelCounter();
+			if (Input.GetKeyUp(KeyCode.Q)) {
+				OnTouched();
+			}
 		}
 	}
 

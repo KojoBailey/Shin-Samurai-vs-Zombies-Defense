@@ -1,0 +1,27 @@
+
+transitionSpeed = 1.0
+
+[back]
+	type = button
+	normalFrame = Sprites/Menus/back_button
+	position = 60, E-60
+	offsetWhenPressed = 4, 4
+	priority = 51
+	[transition]
+		[position]
+			anim = BackOut
+			offset = -120, 120
+		[alpha]
+			alpha = 0.0
+
+
+/-------------------------------------------------
+/	Basic Screen Elements
+/-------------------------------------------------
+
+[bg]
+	type = sprite
+	file = Sprites/Menus/bg_default
+	hotspot = 0, 0
+	position = 0, 0
+	keepAspectRatio = no

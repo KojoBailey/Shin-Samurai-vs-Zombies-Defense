@@ -1,8 +1,8 @@
 [classic]
 	/ Default Hero Setup
-	defaultHeroID = HeroRonin
-	defaultMeleeWeaponID = Katana
-	defaultRangeWeaponID = Bow
+	defaultHeroID = HeroSamurai
+	defaultMeleeWeaponID = Staff
+	defaultRangeWeaponID = Gun
 	
 	/ Gameplay Features available
 	useBell = yes
@@ -35,6 +35,7 @@
 	layout_VictoryMessage = Layouts/VictoryMessage
 	layout_LoseMessage = Layouts/LoseMessage
 	layout_ShopLayout = Layouts/ShopLayout
+	layout_Dictionary = Layouts/Dictionary
 	layout_ReviveDialogSmall = Layouts/ReviveDialogSmall
 	layout_ReviveDialog = Layouts/ReviveDialog
 	layout_DebriefingMenu = Layouts/DebriefingMenu
@@ -81,10 +82,12 @@
 	layout_VictoryMessage = Layouts/VictoryMessage_ZM
 	layout_LoseMessage = Layouts/LoseMessage_ZM
 	layout_ShopLayout = Layouts/ShopLayout_ZM
+	layout_Dictionary = Layouts/Dictionary
 	layout_ReviveDialogSmall = Layouts/ReviveDialogSmall_ZM
 	layout_ReviveDialog = Layouts/ReviveDialog_ZM
 	layout_DebriefingMenu = Layouts/DebriefingMenu_ZM
 	layout_MenuWith3D = Layouts/MenuWith3D_ZM
+	layout_SelectHeroesMenu = Layouts/SelectHeroesMenu_ZM
 	layout_SelectHelpersMenu = Layouts/SelectHelpersMenu_ZM
 	layout_AbilitiesEquip = Layouts/AbilitiesEquip_ZM
 	layout_CharmEquip = Layouts/CharmEquip_ZM
@@ -92,6 +95,7 @@
 	/ Paths substitutions
 	[pathSubstitutions]
 		Registry/Enemies : Registry/Enemies_ZM
+		Registry/Heroes/ : Registry/Heroes_ZM/
 		Registry/Helpers/ : Registry/Helpers_ZM/
 		Registry/Chapters : Registry/Chapters_ZM
 		Registry/DealPacks : Registry/DealPacks_ZM

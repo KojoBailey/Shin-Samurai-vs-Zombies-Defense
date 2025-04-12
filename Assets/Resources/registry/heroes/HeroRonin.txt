@@ -9,8 +9,10 @@ store_levelup = Level up Ronin to Level {0}
 icon = Sprites/Icons/Hero_Ronin
 prefab = Characters/PFHeroRonin
 ghostPrefab = Characters/PFHeroGhost
-rangedWeaponPrefab = 
+meleeWeapon = RoninSword
 meleeSlashFXPrefab = FX/PFKatanaSlash
+
+waveToUnlock = 1
 
 infiniteUpgradeCost = 0,5
 /infiniteUpgradeExtraPulse = Sprites/Localized/on_sale

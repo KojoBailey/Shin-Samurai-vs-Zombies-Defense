@@ -129,7 +129,13 @@ public class Arrow : Projectile
 					break;
 				case EProjectileType.BigExplodingArrow:
 				case EProjectileType.HeroBigExplodingArrow:
+				case EProjectileType.HeroFlame:
+				case EProjectileType.HeroBullet:
 					ApplyExplosion(mTargetRef.ptr, true);
+					Object.Destroy(mArrow);
+					break;
+				case EProjectileType.HeroKunai:
+					ApplyPoison(mTargetRef.ptr, true);
 					Object.Destroy(mArrow);
 					break;
 				case EProjectileType.IceArrow:
@@ -234,6 +240,26 @@ public class Arrow : Projectile
 		else
 		{
 			target.controller.SpawnEffectAtJoint(Resources.Load("FX/Explosion") as GameObject, "impact_target", false);
+		}
+		List<Character> charactersInRange = WeakGlobalInstance<CharactersManager>.instance.GetCharactersInRange(target.position.z - ((!bigVersion) ? 80f : 160f), target.position.z + ((!bigVersion) ? 80f : 160f), target.isEnemy);
+		foreach (Character item in charactersInRange)
+		{
+			if (item.isFlying == target.isFlying)
+			{
+				item.RecievedAttack(EAttackType.Explosion, mDamage);
+			}
+		}
+	}
+
+	private void ApplyPoison(Character target, bool bigVersion)
+	{
+		if (bigVersion)
+		{
+			target.controller.SpawnEffectAtJoint(Resources.Load("FX/KunaiPoisonCloudBig") as GameObject, "impact_target", false);
+		}
+		else
+		{
+			target.controller.SpawnEffectAtJoint(Resources.Load("FX/KunaiPoisonCloud") as GameObject, "impact_target", false);
 		}
 		List<Character> charactersInRange = WeakGlobalInstance<CharactersManager>.instance.GetCharactersInRange(target.position.z - ((!bigVersion) ? 80f : 160f), target.position.z + ((!bigVersion) ? 80f : 160f), target.isEnemy);
 		foreach (Character item in charactersInRange)

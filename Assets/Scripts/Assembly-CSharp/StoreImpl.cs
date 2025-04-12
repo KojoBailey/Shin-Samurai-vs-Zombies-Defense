@@ -8,7 +8,6 @@ public class StoreImpl : SceneBehaviour {
 		public StoreAvailability.Group storeGroup = StoreAvailability.Group.All;
 
 		private SUISprite tabSprite;
-
 		private SUITouchArea tabTouch;
 
 		private string mSpriteFile;
@@ -126,20 +125,6 @@ public class StoreImpl : SceneBehaviour {
 		}
 	}
 
-	private const float kPurchaseAlphaWhenDisabled = 0.3f;
-
-	private const int kNumListColumns = 4;
-
-	private const float kPurchaseDialogPriority = 500f;
-
-	private const int kStoreVisitDealPackTutorialTrigger = 4;
-
-	private const float kPachinkoButtonPulseMin = 0.8f;
-
-	private const float kPachinkoButtonPulseMax = 0.9f;
-
-	private const float kPachinkoButtonPulseSpeed = 0.5f;
-
 	private Rect kPurchaseListArea = new Rect(110f, 130f, 880f, 508f);
 
 	private Vector2 kCellSize = new Vector2(220f, 270f);
@@ -148,11 +133,7 @@ public class StoreImpl : SceneBehaviour {
 
 	private SUILayout mLayout;
 
-	private SUIButton mPlayHaven;
-
 	private YesNoDialog mInternetRequired;
-
-	private YesNoDialog mTapJoyReportedGems;
 
 	private List<TabData> mTabs = new List<TabData>();
 
@@ -167,105 +148,78 @@ public class StoreImpl : SceneBehaviour {
 	private TutorialManager mTutorial;
 
 	private int mLastDisplayedCoins = -1;
-
 	private int mLastDisplayedGems = -1;
-
 	private int mLastBallsNumDisplay = -1;
-
 	private int mLastReviveNumDisplay = -1;
 
 	private bool mPlayingSpecialDealPackTutorial;
 
-	private SUILabel m_pachinkoBalls;
-
-	private int m_pachinkoBallsCnt;
-
-	private bool m_showTapjoyAds;
-
-	public int kTapjoyFeatureAdsInterval {
-		get {
-			if (Debug.isDebugBuild) {
-				return 3;
-			}
-			return 10;
-		}
-	}
-
 	private void Start() {
 		SingletonMonoBehaviour<ResourcesManager>.instance.CheckOnlineUpdates();
 		Singleton<Profile>.instance.ClearBonusWaveData();
+
+		// Load layout data, specifically for Android.
+		string layout_path = Singleton<PlayModesManager>.instance.selectedModeData["layout_ShopLayout"];
+		mLayout = new SUILayout(layout_path + "_Android");
+
+		// Transition into scene.
 		WeakGlobalInstance<SUIScreen>.instance.fader.speed = 1f;
 		WeakGlobalInstance<SUIScreen>.instance.fader.FadeFromBlack();
-		string text = Singleton<PlayModesManager>.instance.selectedModeData["layout_ShopLayout"];
-		mLayout = new SUILayout(text + "_Android");
-		if (ApplicationUtilities.IsGWalletAvailable()) {
-			((SUIButton)mLayout["ggnButton"]).onButtonPressed = delegate {
-				LaunchGGN();
-			};
-		}
-		else {
-			((SUIButton)mLayout["ggnButton"]).visible = false;
-		}
-		((SUISprite)mLayout["ggnBugBg"]).visible = false;
-		((SUILabel)mLayout["ggnBug"]).visible = false;
 		mLayout.AnimateIn();
-		((SUIButton)mLayout["continue"]).onButtonPressed = delegate {
-			GoToMenu("MenuWith3DLevel");
-		};
-		((SUIButton)mLayout["back"]).onButtonPressed = delegate {
-			GoToMenu("MainMenu");
-		};
-		((SUIButton)mLayout["pachinkoButton"]).onButtonPressed = OnGamblingPressed;
-		//((SUITouchArea)mLayout["buyCurrencyTouch"]).onAreaTouched = OnRequestCurrencyPurchase;
+
+		// Assign button functions.
+		((SUIButton)mLayout["continue"]).onButtonPressed = delegate { GoToMenu("MenuWith3DLevel"); };
+		((SUIButton)mLayout["back"]).onButtonPressed = delegate { GoToMenu("MainMenu"); };
+		((SUIButton)mLayout["cardsButton"]).onButtonPressed = delegate { GoToMenu("Dictionary"); };
+		((SUIButton)mLayout["pachinkoButton"]).onButtonPressed = delegate { GoToMenu("Pachinko"); };
 		((SUITouchArea)mLayout["reviveTouch"]).onAreaTouched = OnPurchaseReviveShortcut;
+
+		// If there are Pachinko balls to be spent, make the button scale up and down.
 		if (Singleton<Profile>.instance.pachinkoBalls > 0) {
 			SUILayout.ObjectData objectData = mLayout.objects["pachinkobutton"];
 			SUILayoutEffect.ScalePingPong e = new SUILayoutEffect.ScalePingPong(objectData.obj as SUIButton, 0.8f, 0.9f, 0.5f);
 			objectData.AddEffect(e);
 		}
-		mPlayHaven = (SUIButton)mLayout["playHaven"];
-		//mPlayHaven.onButtonPressed = OnOtherGames;
-		int num = 0;
-		while (mLayout.Exists("tab" + num)) {
-			int index = num;
-			TabData tabData = new TabData(mLayout, num);
-			tabData.storeGroup = (StoreAvailability.Group)num;
+
+		// Generate tabs.
+		for (int i = 0; mLayout.Exists("tab" + i); i++) {
+			TabData tabData = new TabData(mLayout, i);
+			tabData.storeGroup = (StoreAvailability.Group)i;
 			tabData.ReloadItems();
-			if (num == mSelectedTab) {
+			if (i == mSelectedTab) {
 				tabData.selected = true;
 			}
+			int tab_index = i;
 			tabData.onTabTouched = delegate {
 				if (WeakGlobalInstance<TutorialHookup>.instance != null) {
-					WeakGlobalInstance<TutorialHookup>.instance.storeTabTouched[index] = true;
+					WeakGlobalInstance<TutorialHookup>.instance.storeTabTouched[tab_index] = true;
 				}
-				OnTabTouched(index);
+				OnTabTouched(tab_index);
 			};
 			mTabs.Add(tabData);
-			num++;
 		}
 		UpdateTabsLayout();
+
+		// Load store items, depending on the tab.
 		mListController = new StoreListController(kPurchaseListArea, kCellSize, mTabs[mSelectedTab].items);
 		mPurchaseList = new SUIScrollList(mListController, kPurchaseListArea, kCellSize, SUIScrollList.ScrollDirection.Vertical, 4);
 		mPurchaseList.TransitInFromBelow();
 		mPurchaseList.onItemTouched = OnItemTouched;
+
+		// Stuff depending on when or how many times you've visited.
 		Singleton<Profile>.instance.storeVisitCount++;
 		mPlayingSpecialDealPackTutorial = Singleton<Profile>.instance.storeVisitCount == 4 && !Singleton<Profile>.instance.IsTutorialDone("StoreDealPacks", "dealpacks");
 		if (mPlayingSpecialDealPackTutorial) {
 			mTutorial = new TutorialManager("StoreDealPacks", string.Empty);
 			WeakGlobalInstance<SUIScreen>.instance.inputs.processInputs = false;
-		}
-		else {
+		} else {
 			mTutorial = new TutorialManager("Store", string.Empty);
 		}
 		finishedStart = true;
-		Singleton<PlayHavenTowerControl>.instance.InvokeContent("store_launch");
-		if (Application.internetReachability != 0) {
-		}
 		CheckForCompletionistAchievement();
 		if (mPlayingSpecialDealPackTutorial) {
 			OnTabTouched(mTabs.Count - 1);
 		}
-		m_showTapjoyAds = Singleton<Profile>.instance.tapFeatureAdsCnt >= kTapjoyFeatureAdsInterval;
 	}
 
 	private void Update() {
@@ -302,25 +256,9 @@ public class StoreImpl : SceneBehaviour {
 		foreach (TabData mTab in mTabs) {
 			mTab.Update();
 		}
-		if (m_showTapjoyAds) {
-			Singleton<Profile>.instance.tapFeatureAdsCnt = 0;
-			m_showTapjoyAds = false;
-		}
 		UpdatePachinkoBalls();
 		if (Input.GetKeyUp(KeyCode.Escape)) {
 			GoToMenu("MainMenu");
-		}
-		if (ApplicationUtilities.IsGWalletAvailable()) {
-			int num = ApplicationUtilities.instance.GGN_BUG();
-			((SUILabel)mLayout["ggnBug"]).text = num.ToString();
-			if (num == 0) {
-				((SUISprite)mLayout["ggnBugBg"]).visible = false;
-				((SUILabel)mLayout["ggnBug"]).visible = false;
-			}
-			else {
-				((SUISprite)mLayout["ggnBugBg"]).visible = true;
-				((SUILabel)mLayout["ggnBug"]).visible = true;
-			}
 		}
 	}
 
@@ -395,17 +333,6 @@ public class StoreImpl : SceneBehaviour {
 		}
 	}
 
-	private void OnOtherGames() {
-		if (Application.internetReachability != 0) {
-			Singleton<PlayHavenTowerControl>.instance.InvokeContent("more_games");
-			return;
-		}
-		mInternetRequired = new YesNoDialog(Singleton<Localizer>.instance.Get("No_Internet_Notification_Message_Text"), false, delegate {
-		}, null);
-		mInternetRequired.priority = 500f;
-		StartDialog(mInternetRequired);
-	}
-
 	private void OnRequestCurrencyPurchase() {
 		PurchaseCurrencyDialog purchaseCurrencyDialog = new PurchaseCurrencyDialog();
 		purchaseCurrencyDialog.priority = 500f;
@@ -421,18 +348,6 @@ public class StoreImpl : SceneBehaviour {
 				break;
 			}
 		}
-	}
-
-	private void OnCardCollectionPressed() {
-		Debug.Log("OnCardCollectionPressed()");
-	}
-
-	private void OnGamblingPressed() {
-		GoToMenu("Pachinko");
-	}
-
-	private void OnDailyRewardsPressed() {
-		Debug.Log("OnDailyRewardsPressed()");
 	}
 
 	private void UpdateTabsLayout() {
@@ -501,8 +416,5 @@ public class StoreImpl : SceneBehaviour {
 				objectData.AddEffect(e);
 			}
 		}
-	}
-
-	private void LaunchGGN() {
 	}
 }

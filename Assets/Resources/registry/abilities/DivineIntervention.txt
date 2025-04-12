@@ -29,52 +29,52 @@ enemyColorBlue = 219
 
 [001]
 	cost = 0
-	summonAllyChance = 0.50
+	summonAllyChance = 1
 	summonEnemyChance = 0
 	
 
 [002]
 	cost = 1000
-	summonAllyChance = 0.55
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [003]
 	cost = 2000
-	summonAllyChance = 0.60
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [004]
 	cost = 3000
-	summonAllyChance = 0.65
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [005]
 	cost = 4500
-	summonAllyChance = 0.70
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [006]
 	cost = 0,20
-	summonAllyChance = 0.75
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [007]
 	cost = 0,24
-	summonAllyChance = 0.80
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [008]
 	cost = 0,24
-	summonAllyChance = 0.85
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [009]
 	cost = 0,26
-	summonAllyChance = 0.90
+	summonAllyChance = 1
 	summonEnemyChance = 0
 
 [010]
 	cost = 0,30
-	summonAllyChance = 0.95
+	summonAllyChance = 1
 	summonEnemyChance = 0
 

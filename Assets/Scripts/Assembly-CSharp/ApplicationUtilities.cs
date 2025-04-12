@@ -470,7 +470,6 @@ public class ApplicationUtilities : MonoBehaviour
 			StartCoroutine(CheckVersion());
 			mTimeTillCheckDailyRewardsAgain = 10f;
 		}
-		Singleton<Profile>.instance.ConvertLocalGemsToGWallet();
 		if (Singleton<Profile>.IsAlive())
 		{
 			Singleton<Profile>.instance.Update();

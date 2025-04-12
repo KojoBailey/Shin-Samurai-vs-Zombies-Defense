@@ -18,7 +18,10 @@ public class Projectile {
 		HeroBigExplodingArrow = 15,
 		BoneArrow = 16,
 		BoneArrowUpgraded = 17,
-		SpawnFriend = 18
+		SpawnFriend = 18,
+		HeroKunai = 19,
+		HeroBullet = 20,
+		HeroFlame = 21
 	}
 
 	public const float kArcHeightDistPercent = 0.2f;

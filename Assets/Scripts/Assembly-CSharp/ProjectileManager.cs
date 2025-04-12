@@ -36,6 +36,10 @@ public class ProjectileManager : WeakGlobalInstance<ProjectileManager>
 		mProjectilePrefabs[15] = Resources.Load("Props/PFArrowHeroUpgrade2") as GameObject;
 		mProjectilePrefabs[16] = Resources.Load("Props/PFZombieHeroArrow") as GameObject;
 		mProjectilePrefabs[17] = Resources.Load("Props/PFZombieHeroArrowUpgrade") as GameObject;
+		mProjectilePrefabs[18] = Resources.Load("Props/PFZombieHeroArrowUpgrade") as GameObject;
+		mProjectilePrefabs[19] = Resources.Load("Props/kunoichi_kunai/PFKunaiKnifeUpgrade2") as GameObject;
+		mProjectilePrefabs[20] = Resources.Load("Props/daimyo_gun/PFDaimyoGunBullet") as GameObject;
+		mProjectilePrefabs[21] = Resources.Load("Props/onmyoji_balls/PFSorceressRangedBall") as GameObject;
 	}
 
 	public void Update()
@@ -99,6 +103,9 @@ public class ProjectileManager : WeakGlobalInstance<ProjectileManager>
 		case Projectile.EProjectileType.HeroBigExplodingArrow:
 		case Projectile.EProjectileType.BoneArrow:
 		case Projectile.EProjectileType.BoneArrowUpgraded:
+		case Projectile.EProjectileType.HeroFlame:
+		case Projectile.EProjectileType.HeroBullet:
+		case Projectile.EProjectileType.HeroKunai:
 			return true;
 		default:
 			return false;
@@ -122,6 +129,9 @@ public class ProjectileManager : WeakGlobalInstance<ProjectileManager>
 		case Projectile.EProjectileType.HeroBigExplodingArrow:
 		case Projectile.EProjectileType.BoneArrow:
 		case Projectile.EProjectileType.BoneArrowUpgraded:
+		case Projectile.EProjectileType.HeroFlame:
+		case Projectile.EProjectileType.HeroBullet:
+		case Projectile.EProjectileType.HeroKunai:
 			return true;
 		default:
 			return false;

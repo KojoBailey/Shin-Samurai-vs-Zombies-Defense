@@ -26,7 +26,8 @@ public class StoreAvailability
 		if (g == Group.Hero || g == Group.All)
 		{
 			GetBoosterPack(list);
-			GetHeroLevelPurchase(list);
+			StoreAvailability_Heroes.Get(list);
+			// GetHeroLevelPurchase(list);
 			GetSword(list);
 			GetBow(list);
 			GetSmithy(list);

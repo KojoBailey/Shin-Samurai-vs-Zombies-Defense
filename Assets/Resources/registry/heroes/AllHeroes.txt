@@ -1,5 +1,7 @@
-/ List all heroes in the folder
+/ List all Ally Heroes in the folder
 
 HeroSamurai
 HeroRonin
-HeroZombie
+HeroKunoichi
+HeroDaimyo
+HeroOnmyoji

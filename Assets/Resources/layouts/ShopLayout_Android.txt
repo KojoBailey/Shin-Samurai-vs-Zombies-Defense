@@ -112,15 +112,15 @@ transitionSpeed = 1.0
 /	Bottom Buttons
 /-------------------------------------------------
 
-/[cardsButton]
-/	type = button
-/	normalFrame = Sprites/Menus/card_collection_button
-/	position = C-200, E-60
-/	offsetWhenPressed = 4, 4
-/	priority = 50
-/	[transition]
-/		[alpha]
-/			alpha = 0
+[cardsButton]
+	type = button
+	normalFrame = Sprites/Menus/card_collection_button
+	position = C-200, E-60
+	offsetWhenPressed = 4, 4
+	priority = 50
+	[transition]
+		[alpha]
+			alpha = 0
 
 [pachinkoButton]
 	type = button
@@ -149,34 +149,6 @@ transitionSpeed = 1.0
 			offset = 0, 110
 		[alpha]
 			alpha = 0.0
-
-[ggnButton]
-	type = button
-	normalFrame = Sprites/Menus/buttonGGN
-	position = C-300, E-50
-	offsetWhenPressed = 4, 4
-	priority = 50
-	scale = 0.9, 0.9
-	[transition]
-		[alpha]
-			alpha = 0
-			
-[ggnBugBg]
-	type = sprite
-	file = Sprites/Menus/bugGGN
-	priority = 51
-	position = C-265, E-80
-	scale = 0.3, 0.3
-	
-[ggnBug]
-	type = label
-	font = default18
-	position = C-265, E-80
-	shadowOffset = 2, 2
-	shadowColor = 0,0,0
-	priority = 52
-	anchor = middlecenter
-	alignment = center
 
 /-------------------------------------------------
 /	Tabs

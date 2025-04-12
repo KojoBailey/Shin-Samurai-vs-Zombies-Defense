@@ -9,8 +9,12 @@ store_levelup = @store_format_level_hero
 icon = Sprites/Icons/hero01
 prefab = Characters/PFHero01
 ghostPrefab = Characters/PFHeroGhost
+meleeWeapon = Katana
+rangedWeapon = Bow
 rangedWeaponPrefab = Props/PFHeroBow
 meleeSlashFXPrefab = FX/PFKatanaSlash
+
+waveToUnlock = 1
 
 infiniteUpgradeCost = 0,5
 /infiniteUpgradeExtraPulse = Sprites/Localized/on_sale

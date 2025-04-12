@@ -1,0 +1,96 @@
+
+/--------------------------------------------
+/	General
+/--------------------------------------------
+
+displayName = Kunoichi
+desc = Fast and deadly, this master of ninjitsu defends the mountains.
+store_levelup = Level up Kunoichi to Level {0}
+icon = Sprites/Icons/Hero_Kunoichi
+prefab = Characters/PFHeroKunoichi
+ghostPrefab = Characters/PFHeroGhost
+meleeWeapon = Kusarigama
+rangedWeapon = Kunai
+rangedWeaponPrefab = Props/kunoichi_kunai/PFKunaiKnifeUpgrade2
+meleeSlashFXPrefab = FX/PFKatanaSlash
+
+waveToUnlock = 1
+
+infiniteUpgradeCost = 0,5
+/infiniteUpgradeExtraPulse = Sprites/Localized/on_sale
+infiniteUpgradeHealth = 0.05
+infiniteUpgradeHealthRecovery = 0.05
+
+
+/--------------------------------------------
+/	Levels
+/--------------------------------------------
+
+[001]
+	cost = 0,0
+	health = 200
+	healthRecovery = 4
+	speed = 500
+
+
+[002]
+	cost = 250,0
+	health = 250
+	healthRecovery = 5
+	speed = 500
+	
+		
+[003]
+	cost = 850,0
+	health = 350
+	healthRecovery = 7
+	speed = 500
+
+
+[004]
+	cost = 2700,0
+	health = 450
+	healthRecovery = 9
+	speed = 500
+
+
+[005]
+	cost = 5500,0
+	health = 550
+	healthRecovery = 10
+	speed = 500
+
+
+[006]
+	cost = 11000,0
+	health = 845
+	healthRecovery = 15
+	speed = 500
+
+
+[007]
+	cost = 16000,0
+	health = 1140
+	healthRecovery = 22.75
+	speed = 500
+
+
+[008]
+	cost = 22000,0
+	health = 1710
+	healthRecovery = 35
+	speed = 500
+
+
+[009]
+	cost = 35000,0
+	health = 2225
+	healthRecovery = 50
+	speed = 500
+
+
+[010]
+	cost = 50000,0
+	health = 2756
+	healthRecovery = 75
+	speed = 500
