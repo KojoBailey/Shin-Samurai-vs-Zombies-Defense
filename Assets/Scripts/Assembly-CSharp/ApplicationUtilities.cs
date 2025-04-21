@@ -422,9 +422,9 @@ public class ApplicationUtilities : MonoBehaviour
 		if (!string.IsNullOrEmpty(Singleton<Profile>.instance.latestDetectedOnlineVersion))
 		{
 			string[] version = Singleton<Profile>.instance.latestDetectedOnlineVersion.Split('.');
-			if (version.Length >= 3 && (Singleton<GameVersion>.instance.major < int.Parse(version[0]) || (Singleton<GameVersion>.instance.major == int.Parse(version[0]) && Singleton<GameVersion>.instance.minor < int.Parse(version[1])) || (Singleton<GameVersion>.instance.major == int.Parse(version[0]) && Singleton<GameVersion>.instance.minor == int.Parse(version[1]) && Singleton<GameVersion>.instance.revision < int.Parse(version[2]))) && Application.loadedLevelName != "MainMenu")
+			if (version.Length >= 3 && (Singleton<GameVersion>.instance.Major < int.Parse(version[0]) || (Singleton<GameVersion>.instance.Major == int.Parse(version[0]) && Singleton<GameVersion>.instance.Minor < int.Parse(version[1])) || (Singleton<GameVersion>.instance.Major == int.Parse(version[0]) && Singleton<GameVersion>.instance.Minor == int.Parse(version[1]))) && Application.loadedLevelName != "TitleScreen")
 			{
-				Application.LoadLevel("MainMenu");
+				Application.LoadLevel("TitleScreen");
 			}
 		}
 	}
@@ -445,7 +445,7 @@ public class ApplicationUtilities : MonoBehaviour
 		{
 			if (Application.loadedLevel != 0)
 			{
-				Application.LoadLevel("MainMenu");
+				Application.LoadLevel("TitleScreen");
 			}
 		}
 		else if (timeSpan.Days > 1)

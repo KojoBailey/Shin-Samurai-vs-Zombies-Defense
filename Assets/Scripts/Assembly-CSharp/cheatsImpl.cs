@@ -16,7 +16,7 @@ public class cheatsImpl : SceneBehaviour
 		if (!m_quit && Input.GetKeyUp(KeyCode.Escape))
 		{
 			m_quit = true;
-			Singleton<MenusFlow>.instance.LoadScene("MainMenu");
+			Singleton<MenusFlow>.instance.LoadScene("TitleScreen");
 			Singleton<Profile>.instance.Save();
 		}
 	}

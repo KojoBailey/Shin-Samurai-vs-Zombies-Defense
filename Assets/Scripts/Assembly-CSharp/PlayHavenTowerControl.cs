@@ -29,7 +29,7 @@ public class PlayHavenTowerControl : Singleton<PlayHavenTowerControl>
 			Debug.Log(string.Format("*** PlayHaven: ignoring '{0}' event as the tutorial is not over with yet.", contentType));
 			return;
 		}
-		SceneBehaviour.sceneBehaviourInstance.justShownPlayHaven = true;
+		SceneBehaviour.SceneBehaviourInstance.JustShownPlayHaven = true;
 		if (contentType == "more_games" && ApplicationUtilities.IsBuildType("amazon"))
 		{
 			Application.OpenURL("http://gcs.glu.com/gcs/fe?wsid=2&cid=157873&src=svz_app");

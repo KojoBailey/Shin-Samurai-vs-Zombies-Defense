@@ -18,7 +18,7 @@ public class WaitingIconBetweenScenes : SingletonMonoBehaviour<WaitingIconBetwee
 				{
 					mIcon = new SUISprite("Sprites/Localized/loading_timer");
 					mIcon.priority = 5000f;
-					mIcon.position = new Vector2(SUIScreen.width / 2f, SUIScreen.height / 2f);
+					mIcon.position = new Vector2(SUIScreen.Width / 2f, SUIScreen.Height / 2f);
 					Object.DontDestroyOnLoad(mIcon.gameObject);
 				}
 			}

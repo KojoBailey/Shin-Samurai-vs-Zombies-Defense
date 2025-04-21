@@ -5,14 +5,14 @@ public class GameVersion : Singleton<GameVersion> {
 	public const string OBB_FILE_NAME_MASK = "main.{0}.com.glu.samuzombie.obb";
 
 	public const int VersionCode = 340;
-	public int major = 3;
-	public int minor = 4;
-	public int revision;
+	public int Major = 3;
+	public int Minor = 4;
+	public int Revision = 0;
 	public int bundleMajor = 3;
 	public int bundleMinor = 4;
-	public int bundleRevision;
+	public int bundleRevision = 0;
 
-	private BuildInfo m_buildInfo;
+	private BuildInfo buildInfo;
 
 	public string onlineAssetBundlePath {
 		get {
@@ -45,23 +45,23 @@ public class GameVersion : Singleton<GameVersion> {
 
 	public BuildInfo BuildInfo {
 		get {
-			return m_buildInfo;
+			return buildInfo;
 		}
 	}
 
 	public GameVersion() {
-		m_buildInfo = Resources.Load("BuildInfo") as BuildInfo;
-		if (m_buildInfo == null) {
-			m_buildInfo = ScriptableObject.CreateInstance<BuildInfo>();
-			m_buildInfo.AppVersion = string.Format("{0}.{1}.{2}", major.ToString(), minor.ToString(), revision.ToString());
-			m_buildInfo.BuildTag = "SvZ_" + DateTime.Now.ToString("yyyyMMdd-HHmm") + "_A";
-		}
-		if (Debug.isDebugBuild) {
-			m_buildInfo.AppVersion += "D";
+		buildInfo = Resources.Load("BuildInfo") as BuildInfo;
+		if (buildInfo == null) {
+			buildInfo = ScriptableObject.CreateInstance<BuildInfo>();
+			buildInfo.AppVersion = ToString();
+			buildInfo.BuildTag = "SvZ_" + DateTime.Now.ToString("yyyyMMdd-HHmm") + "_A";
 		}
 	}
 
 	public override string ToString() {
-		return m_buildInfo.AppVersion;
+		string result = string.Format("{0}.{1}.{2}", Major.ToString(), Minor.ToString(), Revision.ToString());
+		if (Debug.isDebugBuild)
+				result += "D";
+		return result;
 	}
 }

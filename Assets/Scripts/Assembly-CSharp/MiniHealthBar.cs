@@ -18,7 +18,7 @@ public class MiniHealthBar
 
 	private Vector2 kGateBarBorderHotspot = new Vector2(4f, 4f);
 
-	private Rect kVisibleRange = new Rect(-20f, -20f, SUIScreen.width + 40f, SUIScreen.height + 40f);
+	private Rect kVisibleRange = new Rect(-20f, -20f, SUIScreen.Width + 40f, SUIScreen.Height + 40f);
 
 	private SUISprite mBg;
 
@@ -140,7 +140,7 @@ public class MiniHealthBar
 			}
 			else
 			{
-				vector2.x = Mathf.Min(vector2.x, SUIScreen.width - (float)kGateBarBorderWidth + kGateBarBorderHotspot.x);
+				vector2.x = Mathf.Min(vector2.x, SUIScreen.Width - (float)kGateBarBorderWidth + kGateBarBorderHotspot.x);
 			}
 		}
 		if (kVisibleRange.Contains(vector2) && mTimerSinceLastChange < 2f)

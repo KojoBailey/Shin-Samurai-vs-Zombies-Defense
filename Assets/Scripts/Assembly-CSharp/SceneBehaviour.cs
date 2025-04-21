@@ -1,77 +1,60 @@
 using UnityEngine;
 
-public class SceneBehaviour : MonoBehaviour
-{
-	private float mPlayHavenTimer = 1f;
+public class SceneBehaviour : MonoBehaviour {
+	private float playHavenTimer = 1f;
+	protected bool justShownPlayHaven;
 
-	protected bool mJustShownPlayHaven;
+	private SUIScreen screen;
 
-	private SUIScreen mScreen;
+	private int skipNumUpdate = 3;
 
-	private int mSkipNumUpdate = 3;
+	private static SceneBehaviour uniqueInstance;
 
-	private static SceneBehaviour mUniqueInstance;
-
-	public static SceneBehaviour sceneBehaviourInstance
-	{
-		get
-		{
-			return mUniqueInstance;
+	public static SceneBehaviour SceneBehaviourInstance {
+		get {
+			return uniqueInstance;
 		}
 	}
 
-	public bool justShownPlayHaven
-	{
-		get
-		{
-			return mJustShownPlayHaven;
+	public bool JustShownPlayHaven {
+		get {
+			return justShownPlayHaven;
 		}
-		set
-		{
-			mJustShownPlayHaven = value;
+		set {
+			justShownPlayHaven = value;
 		}
 	}
 
-	private void Awake()
-	{
-		mUniqueInstance = this;
+	private void Awake() {
+		uniqueInstance = this;
 		Singleton<PlayHavenTowerControl>.instance.ClearHistory();
 		SingletonMonoBehaviour<Achievements>.instance.Init();
 		SingletonMonoBehaviour<ResourcesManager>.instance.Init();
 		ApplicationUtilities.instance.Init();
-		mScreen = new SUIScreen();
+		screen = new SUIScreen();
 	}
 
-	protected bool SceneBehaviourUpdate()
-	{
-		if (mSkipNumUpdate > 0)
-		{
-			mScreen.UpdateTimeOnly();
-			mSkipNumUpdate--;
-			if (mSkipNumUpdate == 0)
-			{
+	protected bool SceneBehaviourUpdate() {
+		if (skipNumUpdate > 0) {
+			screen.UpdateTime();
+			skipNumUpdate--;
+			if (skipNumUpdate == 0) {
 				SingletonMonoBehaviour<WaitingIconBetweenScenes>.instance.visible = false;
 			}
 			return true;
 		}
 		UpdatePlayHavenGameLaunch();
-		mScreen.Update();
+		screen.Update();
 		return false;
 	}
 
-	private void UpdatePlayHavenGameLaunch()
-	{
-		if (mJustShownPlayHaven)
-		{
-			mJustShownPlayHaven = false;
+	private void UpdatePlayHavenGameLaunch() {
+		if (justShownPlayHaven) {
+			justShownPlayHaven = false;
 			ApplicationUtilities.instance.mustShowGameLauchPlayHavenAds = false;
-		}
-		else if (mPlayHavenTimer > 0f)
-		{
-			mPlayHavenTimer -= Time.deltaTime;
-		}
-		else if (ApplicationUtilities.instance.mustShowGameLauchPlayHavenAds)
-		{
+		} else if (playHavenTimer > 0f) {
+			playHavenTimer -= Time.deltaTime;
+		} else if (ApplicationUtilities.instance.mustShowGameLauchPlayHavenAds) {
 			Debug.Log("**** DISPLAY PLAYHAVEN ****");
 			ApplicationUtilities.instance.mustShowGameLauchPlayHavenAds = false;
 			Singleton<PlayHavenTowerControl>.instance.InvokeContent("game_launch");

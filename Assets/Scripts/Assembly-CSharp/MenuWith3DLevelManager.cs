@@ -97,12 +97,12 @@ public class MenuWith3DLevelManager : WeakGlobalInstance<MenuWith3DLevelManager>
 	public void GoToMenu(string newMenu)
 	{
 		mLayout.AnimateOut();
-		WeakGlobalInstance<SUIScreen>.instance.fader.FadeToBlack();
-		WeakGlobalInstance<SUIScreen>.instance.fader.onFadingDone = delegate
+		WeakGlobalInstance<SUIScreen>.instance.Fader.FadeToBlack();
+		WeakGlobalInstance<SUIScreen>.instance.Fader.onFadingDone = delegate
 		{
 			Singleton<MenusFlow>.instance.LoadScene(newMenu);
 		};
-		WeakGlobalInstance<SUIScreen>.instance.inputs.processInputs = false;
+		WeakGlobalInstance<SUIScreen>.instance.Inputs.processInputs = false;
 	}
 
 	private void OnSelectWaveButtonPress()

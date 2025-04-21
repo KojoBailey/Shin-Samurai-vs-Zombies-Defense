@@ -1,0 +1,81 @@
+
+/--------------------------------------------
+/	General
+/--------------------------------------------
+
+displayName = Flash Bomb
+desc = Stun your enemies!
+icon = Sprites/Icons/Ability_FlashBomb
+waveToUnlock = 0
+coolDown = 10.0
+attackRange = 500
+
+infiniteUpgradeCost = 0,25
+/infiniteUpgradeExtraPulse = Sprites/Localized/on_sale
+infiniteUpgradeDamage = 0.05
+
+
+/--------------------------------------------
+/	Levels
+/--------------------------------------------
+
+[001]
+	cost = 0
+	damage = 0
+	lifeSteal = 0.0
+	duration = 2
+
+[002]
+	cost = 350,0
+	damage = 0
+	lifeSteal = 0.0
+	duration = 2.5
+
+[003]
+	cost = 1000,0
+	damage = 0
+	lifeSteal = 0.0
+	duration = 3
+
+[004]
+	cost = 2500,0
+	damage = 0
+	lifeSteal = 0.0
+	duration = 3.5
+
+[005]
+	cost = 4000,0
+	damage = 0
+	lifeSteal = 0.0
+	duration = 4
+
+[006]
+	cost = 0,10
+	damage = 0
+	lifeSteal = 0.0
+	duration = 4.5
+
+[007]
+	cost = 0,14
+	damage = 0
+	lifeSteal = 0.0
+	duration = 5
+
+[008]
+	cost = 0,14
+	damage = 100
+	lifeSteal = 0.0
+	duration = 5
+
+[009]
+	cost = 0,16
+	damage = 200
+	lifeSteal = 0.0
+	duration = 5
+
+[010]
+	cost = 0,20
+	damage = 300
+	lifeSteal = 0.0
+	duration = 5
+

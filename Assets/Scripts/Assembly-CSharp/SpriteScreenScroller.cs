@@ -72,7 +72,7 @@ public class SpriteScreenScroller
 	{
 		mAbsSpeed = Mathf.Abs(speed);
 		mTotalScrolled = 0f;
-		mScrollAmountTrigger = SUIScreen.width;
+		mScrollAmountTrigger = SUIScreen.Width;
 		mScrollSpeed = new Vector2(speed, 0f);
 		if (speed > 0f)
 		{
@@ -90,10 +90,10 @@ public class SpriteScreenScroller
 
 	private void UpdateScrolling()
 	{
-		Vector2 vector = new Vector2(mScrollSpeed.x * SUIScreen.deltaTime, mScrollSpeed.y * SUIScreen.deltaTime);
+		Vector2 vector = new Vector2(mScrollSpeed.x * SUIScreen.DeltaTime, mScrollSpeed.y * SUIScreen.DeltaTime);
 		mOriginalRef.position += vector;
 		mClone.position += vector;
-		mTotalScrolled += mAbsSpeed * SUIScreen.deltaTime;
+		mTotalScrolled += mAbsSpeed * SUIScreen.DeltaTime;
 		if (mTotalScrolled < mScrollAmountTrigger)
 		{
 			return;

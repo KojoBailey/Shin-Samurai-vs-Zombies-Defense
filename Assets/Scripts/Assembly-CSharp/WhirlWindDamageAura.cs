@@ -64,11 +64,11 @@ public class WhirlWindDamageAura : MonoBehaviour
 				{
 					if (item.isFlying)
 					{
-						item.RecievedAttack(EAttackType.DOT, mDamagePerHit * mFlierDamageMultiplier);
+						item.ReceivedAttack(EAttackType.DOT, mDamagePerHit * mFlierDamageMultiplier);
 					}
 					else
 					{
-						item.RecievedAttack(EAttackType.DOT, mDamagePerHit);
+						item.ReceivedAttack(EAttackType.DOT, mDamagePerHit);
 					}
 				}
 			}

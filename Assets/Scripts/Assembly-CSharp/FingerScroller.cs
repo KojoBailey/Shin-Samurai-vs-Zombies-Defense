@@ -129,9 +129,6 @@ public class FingerScroller {
 	}
 
 	public FingerScroller() {
-		if (SUIScreen.isDeviceRetina) {
-			kScrollTreshold *= 2f;
-		}
 		mTouchStart = kInvalid;
 		mAutoScrollTarget = kInvalid;
 		mPreviousVelocities = new Vector2[3];
@@ -140,9 +137,9 @@ public class FingerScroller {
 	}
 
 	public void Update() {
-		mBounceFactor = Mathf.Clamp(1f - SUIScreen.deltaTime * 6f, 0f, 0.99f);
-		if (mTouchesEnabled && WeakGlobalInstance<SUIScreen>.instance.inputs.isTouching) {
-			Vector2 position = WeakGlobalInstance<SUIScreen>.instance.inputs.position;
+		mBounceFactor = Mathf.Clamp(1f - SUIScreen.DeltaTime * 6f, 0f, 0.99f);
+		if (mTouchesEnabled && WeakGlobalInstance<SUIScreen>.instance.Inputs.isTouching) {
+			Vector2 position = WeakGlobalInstance<SUIScreen>.instance.Inputs.position;
 			if (mTouchStart == kInvalid) {
 				BeginTouch(position);
 			} else {
@@ -182,7 +179,7 @@ public class FingerScroller {
 
 	private void BeginTouch(Vector2 touchPos) {
 		Rect rect = new Rect(mArea.xMin - mExtraTouchBorder, mArea.yMin - mExtraTouchBorder, mArea.width + mExtraTouchBorder * 2f, mArea.height + mExtraTouchBorder * 2f);
-		if (WeakGlobalInstance<SUIScreen>.instance.inputs.justTouched && rect.Contains(touchPos)) {
+		if (WeakGlobalInstance<SUIScreen>.instance.Inputs.justTouched && rect.Contains(touchPos)) {
 			mTouchStart = touchPos;
 			mDragMode = mOnSimpleTouch == null;
 			ClearVelocityHistory();
@@ -207,7 +204,7 @@ public class FingerScroller {
 			for (int i = 0; i < 2; i++) {
 				mPreviousVelocities[i + 1] = mPreviousVelocities[i];
 			}
-			mPreviousVelocities[0] = new Vector2((0f - vector2.x) / SUIScreen.deltaTime, (0f - vector2.y) / SUIScreen.deltaTime);
+			mPreviousVelocities[0] = new Vector2((0f - vector2.x) / SUIScreen.DeltaTime, (0f - vector2.y) / SUIScreen.DeltaTime);
 		}
 	}
 
@@ -237,8 +234,8 @@ public class FingerScroller {
 
 	private void UpdateAutoScroll() {
 		mSwipeVelocity = Vector2.zero;
-		mScrollPosition.x = (mAutoScrollTarget.x - mScrollPosition.x) * SUIScreen.deltaTime + mScrollPosition.x;
-		mScrollPosition.y = (mAutoScrollTarget.y - mScrollPosition.y) * SUIScreen.deltaTime + mScrollPosition.y;
+		mScrollPosition.x = (mAutoScrollTarget.x - mScrollPosition.x) * SUIScreen.DeltaTime + mScrollPosition.x;
+		mScrollPosition.y = (mAutoScrollTarget.y - mScrollPosition.y) * SUIScreen.DeltaTime + mScrollPosition.y;
 		if (Mathf.Abs(mScrollPosition.x - mAutoScrollTarget.x) < 1f && Mathf.Abs(mScrollPosition.y - mAutoScrollTarget.y) < 1f) {
 			mScrollPosition = mAutoScrollTarget;
 			mAutoScrollTarget = kInvalid;
@@ -274,12 +271,12 @@ public class FingerScroller {
 			mScrollPosition = SnapToMax(mScrollPosition);
 		}
 		if (mSwipeVelocity.x != 0f) {
-			mScrollPosition.x += mSwipeVelocity.x * SUIScreen.deltaTime;
-			mSwipeVelocity.x *= Mathf.Clamp(1f - SUIScreen.deltaTime / 0.1f, 0f, 1f);
+			mScrollPosition.x += mSwipeVelocity.x * SUIScreen.DeltaTime;
+			mSwipeVelocity.x *= Mathf.Clamp(1f - SUIScreen.DeltaTime / 0.1f, 0f, 1f);
 		}
 		if (mSwipeVelocity.y != 0f) {
-			mScrollPosition.y += mSwipeVelocity.y * SUIScreen.deltaTime;
-			mSwipeVelocity.y *= Mathf.Clamp(1f - SUIScreen.deltaTime / 0.1f, 0f, 1f);
+			mScrollPosition.y += mSwipeVelocity.y * SUIScreen.DeltaTime;
+			mSwipeVelocity.y *= Mathf.Clamp(1f - SUIScreen.DeltaTime / 0.1f, 0f, 1f);
 		}
 	}
 

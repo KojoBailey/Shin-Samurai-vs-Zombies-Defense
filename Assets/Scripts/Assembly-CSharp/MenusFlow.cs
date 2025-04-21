@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MenusFlow : Singleton<MenusFlow>
 {
-	private string mCurrentScene = "MainMenu";
+	private string mCurrentScene = "TitleScreen";
 
 	private string mPreviousScene;
 

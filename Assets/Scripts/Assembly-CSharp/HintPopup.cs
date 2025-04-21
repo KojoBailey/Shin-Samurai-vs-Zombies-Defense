@@ -160,7 +160,7 @@ public class HintPopup : IHasVisualAttributes
 	public HintPopup()
 	{
 		mDescPanelRef = new SUISprite("Sprites/Menus/pop_up_extra");
-		mDescPanelRef.scale = new Vector2(WeakGlobalInstance<SUIScreen>.instance.autoScaler.aspectRatioModifier, 1f);
+		mDescPanelRef.scale = new Vector2(WeakGlobalInstance<SUIScreen>.instance.AutoScaler.aspectRatioModifier, 1f);
 		mDescTextRef = new SUILabel("default18");
 		mDescTextRef.shadowColor = Color.black;
 		mDescTextRef.shadowOffset = new Vector2(2f, 2f);

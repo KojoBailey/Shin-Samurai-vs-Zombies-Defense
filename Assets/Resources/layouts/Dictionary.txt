@@ -25,3 +25,123 @@ transitionSpeed = 1.0
 	hotspot = 0, 0
 	position = 0, 0
 	keepAspectRatio = no
+
+[bgTop]
+	type = sprite
+	file = Sprites/Menus/bg_list_top
+	keepAspectRatio = no
+	hotspot = 0, 0
+	position = 0, 0
+	priority = 49
+
+[bgTopB]
+	type = sprite
+	file = Sprites/Menus/bg_list_top_B
+	keepAspectRatio = no
+	hotspot = 0, 337
+	position = 0, E
+	priority = 49
+
+[bgMiddle]
+	type = sprite
+	file = Sprites/Menus/bg_list_middle
+	keepAspectRatio = no
+	hotspot = 0, 0
+	position = 0, 0
+	priority = 48
+
+[card]
+	type = sprite
+	file = Sprites/Cards/Samurai
+	keepAspectRatio = no
+	scale = 0.2, 0.2
+	position = 100, 230
+	priority = 101
+	[transition]
+		[position]
+			anim = BackOut
+			animRange = 0.0, 0.6
+			offset = 0, -80
+		[alpha]
+			animRange = 0.0, 0.6
+			alpha = 0.0
+
+[card1]
+	type = sprite
+	file = Sprites/Cards/Ronin
+	keepAspectRatio = no
+	scale = 0.2, 0.2
+	position = 220, 230
+	priority = 102
+	[transition]
+		[position]
+			anim = BackOut
+			animRange = 0.0, 0.6
+			offset = 0, -80
+		[alpha]
+			animRange = 0.0, 0.6
+			alpha = 0.0
+
+[card2]
+	type = sprite
+	file = Sprites/Cards/Kunoichi
+	keepAspectRatio = no
+	scale = 0.2, 0.2
+	position = 340, 230
+	priority = 102
+	[transition]
+		[position]
+			anim = BackOut
+			animRange = 0.0, 0.6
+			offset = 0, -80
+		[alpha]
+			animRange = 0.0, 0.6
+			alpha = 0.0
+
+[card3]
+	type = sprite
+	file = Sprites/Cards/Daimyo
+	keepAspectRatio = no
+	scale = 0.2, 0.2
+	position = 460, 230
+	priority = 102
+	[transition]
+		[position]
+			anim = BackOut
+			animRange = 0.0, 0.6
+			offset = 0, -80
+		[alpha]
+			animRange = 0.0, 0.6
+			alpha = 0.0
+
+[card4]
+	type = sprite
+	file = Sprites/Cards/Onmyoji
+	keepAspectRatio = no
+	scale = 0.2, 0.2
+	position = 100, 450
+	priority = 102
+	[transition]
+		[position]
+			anim = BackOut
+			animRange = 0.0, 0.6
+			offset = 0, -80
+		[alpha]
+			animRange = 0.0, 0.6
+			alpha = 0.0
+
+[cardBig]
+	type = sprite
+	file = Sprites/Cards/Daimyo
+	keepAspectRatio = no
+	scale = 0.7, 0.7
+	position = E-200, C
+	priority = 102
+	[transition]
+		[position]
+			anim = BackOut
+			animRange = 0.0, 0.6
+			offset = 0, -80
+		[alpha]
+			animRange = 0.0, 0.6
+			alpha = 0.0
